@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bluesails</title>
+<link rel="stylesheet" href="style.css"/>
+<link href = "tab.css" rel = "stylesheet">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+<link rel="stylesheet" type="text/css" href="css/vmenuModule.css" />
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="./js/function.js"></script>
+<script type="text/javascript" src="js/vmenuModule.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script src="js/bootstrap1.min.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+
+<script type="text/javascript">
+jQuery(document).ready(function(){		
+	jQuery( document ).on( "mobileinit", function() {
+		jQuery.mobile.allowCrossDomainPages = true;
+	});
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+	if(window.XDomainRequest){contentType = "text/plain";}
+	jQuery.support.cors = true;
+	
+	jQuery(".menu_box").click(function(){
+        jQuery(".menusection").toggle();
+    });
+	
+	var siteurl=gup('siteurl', window.location.href);
+	var pid = GetURLParameter('pid');
+	var url = siteurl+'/api/products.php?&pid='+pid;
+	var uid = GetURLParameter('uid');
+	var device_id = GetURLParameter('device_id');
+	
+	if(localStorage.getItem('userInfo') == null){	   
+	   var uid = 0;		
+	}else{		
+		var uid = localStorage.getItem('userInfo');				
+	}
+	
+	
+	// main nav
+	
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: siteurl + '/api/new_nav.php', 
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(menulist){				
+				jQuery("#main-sidebar").html(menulist['nav']);
+			
+		 }			
+  	});
+	
+	// end nav
+	
+	var carturl = siteurl+'/api/cart.php';
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: carturl, 		
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(res){		
+			 var cart_data = "<div class='totalcart_result'>0</div>" ;
+				if(parseInt(res['totalitems']) > 0)
+				{
+					cart_data = "<div class='totalcart_result'>"+res['totalitems']+"</div>" ;
+				}
+				jQuery(".cart_result").append(cart_data);			
+		 }			
+	});		
+	
+	var carturl = siteurl+'/api/cart.php';
+	jQuery('.totalcart').click(function(){
+		jQuery.ajax({  
+			 type: 'GET',
+			 url: carturl,			
+			 dataType: 'json',
+			 data: {user_id:uid,device_id:device_id},
+			 beforeSend: function() {
+					jQuery(".loading").show();					
+				},		
+				complete: function() {
+					jQuery(".loading").hide();					
+				},    
+			 crossDomain: true,  
+			 success: function(pro){
+				if(parseInt(pro['totalitems']) > 0)
+				{
+					window.location='cart.html?siteurl='+siteurl+'&uid='+uid+'&device_id='+device_id;					
+				}else{
+					alert("Cart is empty.");	
+				}
+			}
+		});
+	});
+	
+	jQuery.ajax({  
+	type: 'GET',  
+	url: url,  	
+	dataType: 'json',
+	beforeSend: function() {
+		jQuery(".loading").show();					
+	},		
+	complete: function() {
+		jQuery(".loading").hide();					
+	},  
+	crossDomain: true,  
+	success: function(res){	
+		
+	jQuery(res['products']).each(function(index){
+	if(res['products'] == "success")
+	{					
+			
+			var product_wrapper = '<div class="top_div"><ul><li class="active"><span class="back_product"><img class="left_arrow" src="images/left_arrow.png"></span>' + res['products'][index]['name'] + '</li></ul></div><div class="content product_div"><div class="big_img_div">' + "<img src=" + res['products'][index]['image'] + ' height="118" width = "344"></div><div class="name_wrapper"><p>' + res['products'][index]['name'] + '</p><p>' + '$' + res['products'][index]['price'] + '</p></div>';
+			
+			
+			if(res['products'][index]['gallery'])
+			{			
+				product_wrapper  += '<ul class="thumbnail_div">' + res['products'][index]['gallery'] +  '</ul>';
+			}
+			
+			
+			// short description 
+			
+			product_wrapper += '<div class="descrption product_detail2"><h3>Description</h3><p>' + res['products'][index]['post_excerpt'] + '</p></div>';
+			
+			// end shot description
+						
+			
+			
+			
+			// add to cart
+			
+			product_wrapper += '<div class="add_cart"><div class="product_quantity"><input type="text" name="qty" value="1"></div><div class="edit_cart"><input type="button" name="add_to_cart" id="'+ pid +'" value="add to cart"></div></div>';
+			
+			product_wrapper += '<div id="description_tab" class="signin_div form_submit new_product_desct"><ul><li data-id="1"><a href ="#description">Description</a></li><li><span class="ui-tabs-anchor">/</span></li><li data-id="2"><a href="#review">Reviews</a></li></ul>';
+			
+			product_wrapper += '<div id="description"><div class="content"><div>' + res['products'][index]['description'] + '</div></div></div>';
+			
+			if(res['product_review'])
+			{
+				product_wrapper += '<div id="review"><div class="content"><h5 class"reviewheading">Review</h5>'+ res['product_review'] +'</div></div>';
+			}else{
+				product_wrapper += '<div id="review"><div class="content"><h5>Review</h5><p>There are no reviews yet.</p></div></div>';
+			}
+			
+			if(res['related_products'])
+			{
+				product_wrapper += '<div class="content product_div">' + res['related_products'] + '</div>';
+			}
+			
+			
+			jQuery(".products_result").html(product_wrapper);
+			jQuery( "#description_tab" ).tabs();
+		
+	}
+	else
+	{
+		if((res['products'][index]['description'])=='')
+		{
+			
+			
+			var product_wrapper = '<div class="top_div"><ul><li class="active"><span class="back_product"><img class="left_arrow" src="images/left_arrow.png"></span>' + res['products'][index]['name'] + '</li></ul></div><div class="content product_div"><div class="big_img_div">' + "<img src=" + res['products'][index]['image'] + ' height="118" width = "344"></div><div class="name_wrapper"><p>' + res['products'][index]['name'] + '</p><p>' + '$' + res['products'][index]['price'] + '</p></div>';
+			
+				
+			if(res['products'][index]['gallery'])
+			{			
+				product_wrapper  += '<ul class="thumbnail_div">' + res['products'][index]['gallery'] +  '</ul>';
+			}	
+					
+			// short description 
+			
+			product_wrapper += '<div class="descrption product_detail2"><h3>Description</h3><p>' + res['products'][index]['post_excerpt'] + '</p></div>';
+			
+			// end shot description
+			
+						
+			// add to cart
+			
+			product_wrapper += '<div class="add_cart"><div class="product_quantity"><input type="text" name="qty" value="1"></div><div class="edit_cart"><input type="button" name="add_to_cart" value="add to cart" id="'+ pid +'"></div></div>';
+			
+			product_wrapper += '<div id="description_tab" class="signin_div form_submit new_product_desct"><ul><li data-id="1"><a href ="#description">Description</a></li><li><span class="ui-tabs-anchor">/</span></li><li data-id="2"><a href="#review">Reviews</a></li></ul>';
+			
+			product_wrapper += '<div id="description"><div class="content"><div>' + res['products'][index]['description'] + '</div></div></div>';
+			
+			if(res['product_review'])
+			{
+				product_wrapper += '<div id="review"><div class="content"><h5>Review</h5>'+ res['product_review'] +'</div></div>';
+			}else{
+				product_wrapper += '<div id="review"><div class="content"><h5>Review</h5><p>There are no reviews yet.</p></div></div>';
+			}		
+			
+			
+			if(res['related_products'])
+			{
+				product_wrapper += '<div class="content product_div">' + res['related_products'] + '</div>';
+			}
+			
+			jQuery(".products_result").html(product_wrapper);
+			
+			jQuery( "#description_tab" ).tabs();
+		}
+		else
+		{
+			
+			
+			var product_wrapper = '<div class="top_div"><ul><li class="active"><span class="back_product"><img class="left_arrow" src="images/left_arrow.png"></span>' + res['products'][index]['name'] + '</li></ul></div><div class="content product_div"><div class="big_img_div">' + "<img src=" + res['products'][index]['image'] + ' height="118" width = "344"></div><div class="name_wrapper"><p>' + res['products'][index]['name'] + '</p><p>' + '$' + res['products'][index]['price'] + '</p></div>';
+			
+			
+			
+			if(res['products'][index]['gallery'])
+			{			
+				product_wrapper  += '<ul class="thumbnail_div">' + res['products'][index]['gallery'] +  '</ul>';
+			} 
+			
+			// short description
+						
+			product_wrapper += '<div class="descrption product_detail2"><h3>Description</h3><p>' + res['products'][index]['post_excerpt'] + '</p></div>';
+			
+			// end shot description
+			
+			
+			
+			
+			// add to cart
+			
+			product_wrapper += '<div class="add_cart"><div class="product_quantity"><input type="text" name="qty" value="1"></div><div class="edit_cart"><input type="button" name="add_to_cart" value="add to cart" id="'+ pid +'"></div></div>';
+			
+			product_wrapper += '<div id="description_tab" class="signin_div form_submit new_product_desct"><ul><li data-id="1"><a href ="#description">Description</a></li><li><span class="ui-tabs-anchor">/</span></li><li data-id="2"><a href="#review">Reviews</a></li></ul>';
+			
+			product_wrapper += '<div id="description"><div class="content"><div>' + res['products'][index]['description'] + '</div></div></div>';
+			
+			if(res['product_review'])
+			{
+				product_wrapper += '<div id="review"><div class="content"><h5>Review</h5>'+ res['product_review'] +'</div></div>';
+			}else{
+				product_wrapper += '<div id="review"><div class="content"><h5>Review</h5><p>There are no reviews yet.</p></div></div>';
+			}	
+			
+			if(res['related_products'])
+			{
+				product_wrapper += '<div class="content product_div">' + res['related_products'] + '</div>';
+			}
+			
+			jQuery(".products_result").html(product_wrapper);
+			
+			jQuery( "#description_tab" ).tabs();
+			
+		}
+	}
+	
+		jQuery('.back_product').click(function(){
+		 	var cid = "109";
+			var cname="04 Hardware";			
+			window.location='products.html?siteurl='+siteurl+'&cname='+cname+'&cid='+cid+'&uid='+uid+'&device_id='+device_id;
+		}); 
+					
+	});
+	
+	
+	var addtocarturl = siteurl+'/api/addtocart.php';
+	
+	jQuery('input[name="add_to_cart"]').live("click", function(){		
+		var pid = jQuery(this).attr("id");	
+		
+		var cart_qty = jQuery('input[name="qty"]').val();
+			
+		jQuery.ajax({  
+			 type: 'POST',  
+			 url: addtocarturl, 			  
+			 dataType: 'json', 
+			 beforeSend: function() {
+					jQuery(".loading").show();					
+				},		
+				complete: function() {
+					jQuery(".loading").hide();					
+				},
+			 data: {product_id:pid,user_id:uid,device_id:device_id,qty:cart_qty},
+			 crossDomain: true,
+			 beforeSend: function() {
+				jQuery(".loading").show();
+				jQuery('input[name="add_to_cart"]').attr("disabled",true);				
+			},
+			complete: function() {
+				jQuery(".loading").hide();
+				jQuery('input[name="add_to_cart"]').attr("disabled",false);
+			},  
+			 success: function(cart){						 
+			 var cart_items = "<div class='totalcart_result'>0</div>";		 
+			 
+				if(cart['totalitems'])
+				{					
+					cart_items = "<div class='totalcart_result'>"+cart['totalitems']+"</div>";
+				}
+				
+				jQuery(".cart_result").append(cart_items);
+				
+			
+				}
+			});
+		}); 
+		
+		
+		jQuery('.add_to_cart').live("click", function(){		
+		var pid = jQuery(this).attr("id");						
+		jQuery.ajax({  
+			 type: 'POST',  
+			 url: addtocarturl, 			  
+			 dataType: 'json', 
+			 beforeSend: function() {
+					jQuery(".loading").show();					
+				},		
+				complete: function() {
+					jQuery(".loading").hide();					
+				},
+			 data: {product_id:pid,user_id:uid,device_id:device_id},
+			 crossDomain: true,
+			 beforeSend: function() {
+				jQuery(".loading").show();
+				jQuery('input[name="add_to_cart"]').attr("disabled",true);				
+			},
+			complete: function() {
+				jQuery(".loading").hide();
+				jQuery('input[name="add_to_cart"]').attr("disabled",false);
+			},  
+			 success: function(cart){						 
+			 var cart_items = "<div class='totalcart_result'>0</div>";		 
+			 
+				if(cart['totalitems'])
+				{					
+					cart_items = "<div class='totalcart_result'>"+cart['totalitems']+"</div>";
+				}
+				
+				jQuery(".cart_result").append(cart_items);
+				
+			
+				}
+			});
+		}); 
+		
+	
+	}
+});
+
+		
+	var producturl = siteurl+'/api/products.php';	
+	jQuery('.woo_pro_details').live("click", function(){		
+		var pid = jQuery(this).attr("id");
+		window.location='product_details.html?siteurl='+siteurl+'&pid='+pid + '&uid='+uid+'&device_id='+device_id;
+	});
+	
+	jQuery('.prod_thumb').live("click",function(){
+		
+		var img_replace_url = jQuery(this).attr("id");		
+				
+		jQuery(".big_img_div img").attr("src", img_replace_url)
+		
+	});
+	
+	
+}); 
+</script>
+</head>
+<body>
+<div class="header">
+		<div class="home_top_img">		
+			<div class="logo">
+			<a href="home.html"><img src="images/logo2.png"></a>
+			</div>
+            <div class="snd_home_img">
+            <img src="images/blue_sail4.png">
+            </div>
+            </div>
+        <div class="header_snd_part">
+            <div id="main-navbar" class="main-navbar main-navbar-fixed-top">
+           
+            <div class="main-navbar-content">
+                <div id="toggle-sidebar" class="icon left">
+                    <img alt="menu" src="assets/menu32@64.png" width=24px height="24px">
+                </div>
+            </div>
+             <li><a href="home.html"><img src="images/home1.png"></a></li>
+        	</div>
+            <div class="snd_div_header">
+            <div class="sarch_div">
+            <form class="searchbox">
+        		<input type="search" placeholder="Search Products......" name="search_keyword" class="searchbox-input">       
+        		<a href="javascript:void(0);" class="searchbox-submit" ><img src="images/search.png"></a>       
+    		</form>
+            </div>
+            <div class="footer">
+            <ul class="footer_img">
+            <li class="account_sign"><a href="login.html"><img src="images/login1.png"></a></li>
+            <li class="account_signout"><a href="logout.html"><img src="images/logout1.png"></a></li>
+            <li><div class="main_btnbox"><div class="buttonbox" data-toggle="modal" data-target='#myModal'><button><img src="images/share1.png"></button></div></div></li>
+            </ul>
+            </div>
+            
+			<div class="headr_right">
+				<ul>                
+                	<li class="totalcart"><img src="images/cart1.png"><div class="cart_result"></div></li>
+				</ul>
+			</div>
+            </div>
+	</div>		
+      
+        <div id="main-sidebar" class="main-sidebar main-sidebar-left">
+            <div id="main-sidebar-wrapper" class="main-sidebar-wrapper"></div>
+        </div>        
+</div>
+<div class="main_div">
+	<div class="container">		
+			<div class="signin_div category_div">
+					<div class="products_result"></div>                
+	  </div>
+	</div>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">    
+    <div class="modal-content">      
+      <div class="modal-body">
+            <div class="innertext">	
+                <ul class="close_open_ul"><li><button type="button" class="btn btn-default" data-dismiss="modal"><img src="images/cancel.png"></button></li></ul>
+                        <ul>                                           
+                          <li><a href="https://www.facebook.com/bluesailsco" target="_blank"><img src="images/pop_upfb.jpg"></a></li>
+                          <li><a href="https://plus.google.com/103562994741176248240/posts" target="_blank"><img src="images/pop_upg+.jpg"></a></li>
+                          <li><a href="https://id.linkedin.com/in/bluesails" target="_blank"><img src="images/pop_upin.jpg"></a></li>
+                          <li><a href="https://twitter.com/bluesailsco" target="_blank"><img src="images/pop_uptw.jpg"></a></li>
+                          <li><a href="https://www.youtube.com/channel/UCGNfkfSbjth8rE2k40pgXJw" target="_blank"><img src="images/pop_upyou_tube.jpg"></a></li>
+                        </ul>            
+            </div>
+       </div>    
+    </div>
+  </div>
+</div>
+<div class="loading"><div id="wait"><img src='images/demo_wait.gif' width="64" height="64" /><br>Please wait..</div></div>
+<script src="js/jquery.simpler-sidebar.min.js"></script>
+<script>
+	jQuery(document).ready(function() {
+		jQuery('#main-sidebar').simplerSidebar({
+		opener: '#toggle-sidebar',
+		top: 42,
+		animation: {
+			easing: "easeOutQuint"
+		},
+		sidebar: {
+			align: 'left',
+			closingLinks: '.close-sb'
+		}
+		});
+	});
+</script>
+ </body>
+ </html>

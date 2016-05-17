@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<title>Bluesails</title>
+<link rel="stylesheet" href="style.css"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script>
+jQuery(document).ready(function(){
+if(localStorage.getItem('userInfo') == null){
+   //jQuery.mobile.changePage('login.html');
+   //alert(localStorage.getItem('userInfo'));
+   var uid = 0;
+   jQuery('.after_login').hide();
+	jQuery('.account_login').show();
+	jQuery('.login').show();
+	jQuery('.logout').hide();
+}
+else
+{
+	var uid = localStorage.getItem('userInfo');
+	jQuery('.after_login').show();
+	jQuery('.account_login').hide();
+	jQuery('.login').hide();
+	jQuery('.logout').show();
+	//alert(localStorage.getItem('userInfo'));
+}
+
+});
+</script>
+</head>
+<body>
+
+<div class="header">
+			<div class="logo">
+			<a href="#"><img src="images/logo2.png"></a>
+			</div>
+			<div class="headr_right">
+				<ul>
+				<li><a href="home.html"><img src="images/home1.png"></a></li>
+				<li><a href="#"><img src="images/cart1.png"></a></li>
+				</ul>
+			</div>
+		</div>
+<div class="main_div menus_main">
+	<div class="container">
+		
+        <div class="clr"></div>
+			<div class="menus starting_menus"><!----------------menus---------------->
+	 <ul>
+				
+				<li><a href="category.html"><p class="left_img"><img src="images/mm3.png"></p>
+				<p class="right_text"><strong>Product Category</strong><br/>We set a new standard of endless possibilities.</p></a>
+				</li>
+				<li><a href="quote_form.html"><p class="left_img"><img src="images/mm4.png"></p>
+				<p class="right_text"><strong>quote form</strong><br/>Fill the quote form</p></a>
+				</li>
+				<li><a href="faq.html"><p class="left_img"><img src="images/mm5.png"></p>
+				<p class="right_text"><strong>faq</strong><br/>Being your life changing experience
+                 with  Bluesails faq.</p></a>
+				</li>
+				<li class="account_login"><a href="login.html"><p class="left_img"><img src="images/mm1.png"></p>
+				<p class="right_text"><strong> account</strong><br/>Login / Register with Bluesails.</p></a>
+				</li>
+                <li class="after_login"><a href="my_account.html"><p class="left_img"><img src="images/mm1.png"></p>
+				<p class="right_text"><strong> account</strong><br/>Login / Register with Bluesails.</p></a>
+				</li>
+				<li><a href="community.html"><p class="left_img"><img src="images/mm8.png"></p>
+				<p class="right_text"><strong>Community</strong><br/>Latest news from Bluesails.</p></a>
+				</li>
+				<li><a href="#"><p class="left_img"><img src="images/mm2.png"></p>
+				<p class="right_text"><strong>Special</strong><br/>Special from Bluesails.</p></a>
+				</li>
+                   <li><a href="job.html"><p class="left_img"><img src="images/mm7.png"></p>
+                <p class="right_text"><strong>Job</strong><br/>Be the part of Bluesails. 
+               </p></a> </li>
+               <li><a href="about.html"><p class="left_img"><img src="images/mm10.png"></p>
+				<p class="right_text"><strong>About</strong><br/>Contact with Bluesails. </p></a>
+				</li>
+				<li class="cntct_li"><a href="contact.html"><p class="left_img"><img src="images/mm9.png"></p>
+				<p class="right_text"><strong>Contact Us</strong><br/>Contact with Bluesails. </p></a>
+				</li>
+			</ul>
+			</div>
+			
+				
+
+	</div>
+</div>
+<div class="footer"><!--------------------footer--------------------------->
+    <ul>
+    <li class="login"><a href="login.html">login</a></li>
+    <li class="logout"><a href="logout.html">logout</a></li>
+    </ul>
+    <ul class="footer_img">
+    <li><a href="#"><img src="images/search.png"></a></li>
+    <li><a href="#"><img src="images/share.png"></a></li>
+    </ul>
+ </div>
+
+</body>		
+</html>

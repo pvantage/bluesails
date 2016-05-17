@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bluesails</title>
+<link rel="stylesheet" href="style.css"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+ <link href="css/jquerysctipttop.css" rel="stylesheet" type="text/css">
+<link rel="stylesheet" type="text/css" href="css/vmenuModule.css" />
+
+<script src="js/bootstrap1.min.js"></script>
+<script type="text/javascript" src="./js/function.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	jQuery.getJSON("http://jsonip.com/?callback=?", function (data) {
+       
+        var uiid = unescape(data.ip);
+		var encodedString = btoa(uiid);
+				
+		var device_id = encodedString;
+    
+	jQuery( document ).on( "mobileinit", function() {
+		jQuery.mobile.allowCrossDomainPages = true;
+	});
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+    if(window.XDomainRequest){contentType = "text/plain";}
+	jQuery.support.cors = true;
+	
+	var siteurl = "http://www.bluesails.co";
+	
+	if(localStorage.getItem('userInfo') == null){	   
+	   var uid = 0;		
+	}else{			
+		var uid = localStorage.getItem('userInfo');		
+	}
+	
+	// main nav
+	
+	/*jQuery.ajax({  
+		 type: 'GET',  
+		 url: siteurl + '/api/navigation.php', 
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(menulist){				
+				jQuery(".main-sidebar-wrapper").html(menulist['nav']);
+			
+		 }			
+  	});*/
+	
+	// end nav
+	
+	
+	var carturl = siteurl+'/api/cart.php';
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: carturl, 
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(res){
+			 var cart_data = "<div class='totalcart_result'>0</div>" ;
+				if(parseInt(res['totalitems']) > 0)
+				{
+					 cart_data = "<div class='totalcart_result'>"+res['totalitems']+"</div>" ;
+				}
+				jQuery(".cart_result").append(cart_data);
+			
+		 }			
+	});
+	
+	
+	jQuery('.totalcart').live("click", function(){
+		jQuery.ajax({  
+			 type: 'GET',  
+			 url: carturl, 			
+			 dataType: 'json',
+			 data: {user_id:uid,device_id:device_id},    
+			 crossDomain: true,  
+			 success: function(pro){
+				
+				if(parseInt(pro['totalitems']) > 0)
+				{				
+										
+					window.location='cart.html?siteurl='+siteurl+'&uid='+uid+'&device_id='+device_id;					
+				}
+			}
+			});
+		});		
+	});	
+});		
+</script>
+<script type="text/javascript" src="js/vmenuModule.js"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		jQuery(".u-vmenu").vmenuModule({
+			Speed: 200,
+			autostart: false,
+			autohide: true
+		});
+	});
+</script>
+</head>
+<body class="home_bg">
+	<div class="header">
+		<div class="home_top_img">		
+			<div class="logo">
+			<a href="home.html"><img src="images/logo2.png"></a>
+			</div>
+            <div class="snd_home_img">
+            <img src="images/blue_sail4.png">
+            </div>
+            </div>
+        <div class="header_snd_part">
+            <div id="main-navbar" class="main-navbar main-navbar-fixed-top">
+           
+            <div class="main-navbar-content">
+                <div id="toggle-sidebar" class="icon left">
+                    <img alt="menu" src="assets/menu32@64.png" width=24px height="24px">
+                </div>
+            </div>
+             <li><a href="home.html"><img src="images/home1.png"></a></li>
+        	</div>
+            <div class="snd_div_header">
+            <div class="sarch_div">
+            <form class="searchbox">
+        		<input type="search" placeholder="Search Products......" name="search_keyword" class="searchbox-input">       
+        		<a href="javascript:void(0);" class="searchbox-submit" ><img src="images/search.png"></a>       
+    		</form>
+            </div>
+            <div class="footer">
+            <ul class="footer_img">
+            <li class="account_sign"><a href="login.html"><img src="images/login1.png"></a></li>
+            <li class="account_signout"><a href="logout.html"><img src="images/logout1.png"></a></li>
+            <li><div class="main_btnbox"><div class="buttonbox" data-toggle="modal" data-target='#myModal'><button><img src="images/share1.png"></button></div></div></li>
+            </ul>
+            </div>
+            
+			<div class="headr_right">
+				<ul>                
+                	<li class="totalcart"><img src="images/cart1.png"><div class="cart_result"></div></li>
+				</ul>
+			</div>
+            </div>
+	</div>		
+      
+        <div id="main-sidebar" class="main-sidebar main-sidebar-left">
+            <div class="u-vmenu">
+				<ul>
+                
+                <li><p class="right_text"><a href="about.html"><strong>about</strong></a></p></li>
+                <li><p class="right_text"><a href="our-ambassador.html"><strong>Our Ambassadors</strong></a></p></li>
+			   <li>
+						<a href="#"><strong>products</strong></a>
+						<ul>
+							<li><a href="#"><strong>Custom Sails</strong></a>
+                            
+                            <ul>
+                            	<li><a href="#">Bavaria Yachts</a></li>
+                                
+                            	<li><a href="#">Beneteau Yachts</a>
+                                	<ul>
+                                    	<li><a href="#">Oceanis 45</a>
+                                        <ul>
+                                        	<li><a href="#">Headsail</a></li>
+                                        	<li><a href="#">Mainsail</a></li>
+                                        </ul>
+                                        </li>
+                                        
+                                        
+                                        
+                                        
+                                        <li><a href="#">Sense 55</a>
+                                        
+                                        <ul>
+                                        	<li><a href="#">Headsail</a></li>
+                                        	<li><a href="#">Mainsail</a></li>
+                                        </ul>
+                                        
+                                        </li>
+                                    
+                                    </ul>
+                                
+                                
+                                </li>
+                                <li><a href="#">Lagoon Catamarans</a>
+                                	<ul>
+                                    	<li><a href="#">Lagoon (EU) 440</a>
+                                        	<ul>
+                                            	<li><a href="#">Mainsail</a></li>
+                                            </ul>
+                                        
+                                        
+                                        </li>
+                                        
+                                        
+                                    	<li><a href="#">Lagoon 500</a>
+                                        	<ul>
+                                            	<li><a href="#">Mainsail</a></li>
+                                            </ul>                                        
+                                        </li>
+                                    </ul>
+                                </li>                                                  
+                             </ul>
+                            
+                            
+                            </li>                                    							
+							
+							
+                       
+                            
+                            
+							<li>
+								<a href="#"><strong>02 Custom Tenders</strong></a>
+								<ul>
+									<li><a href="#">Inflatable BSU250</a></li>
+                                     <li><a href="#">Orca Hypalon</a></li>
+									<li><a href="#">Inflatable BSU200</a></li>
+									<li><a href="#">Inflatable BSU250 - A TYPE/HYPALON/PLYWOOD</a></li>
+									<li><a href="#">Inflatable BSU250 - V TYPE/.9MM PVC/PLYWOOD</a></li>
+										
+									
+								
+								</ul>
+							</li>
+                            
+                            	<li>
+								<a href="#"><strong>03 Books & Charts</strong></a>
+								 <ul>
+									<li><a href="#">10000nm Berlayar Menuju Ibunda</a></li>
+                                     <li><a href="#">Cruising Guide to Indonesia</a></li>
+									<li><a href="#">Inflatable BSU200</a></li>
+									<li><a href="#">Western Indonesia & Beyond</a></li>
+									<li><a href="#">Belitung</a></li>
+									</ul>	
+                                        </li>
+                                 <li>
+								<a href="#"><strong>04 Hardware</strong></a>
+								 <ul>
+									<li><a href="#">Nylon Piston Hank</a></li>
+                                     <li><a href="#">Sail Ties</a></li>
+									<li><a href="#">Shackle Large SS</a></li>
+									<li><a href="#">Seadog Mast Step</a></li>
+									</ul>
+										
+                                        </li>
+                                    
+                                    </ul>
+                                </li>
+							
+							<li><p class="right_text"><a href="#"><strong>Order in progress</strong></a></p></li>
+                            	<li><a href="#"><strong>Expeditions</strong></a>
+                                    <ul>
+                                    <li><a href="#"><strong>2016 Cruising Asean</strong></a></li>
+                                    <li><a href="2013-fremantle-to-bali.html"><strong>2013 Fremantle to Bali</strong></a></li>
+                                    <li><a href="darwin_ambon.html"><strong>2013 Darwin to Ambon</strong></a></li>
+                                    <li><a href="sail_morotai.html"><strong> 2012 Sail Morotai</strong></a></li>
+                                    <li><a href="kembara.html"><strong>2012 Kembara Bahari</strong></a></li>
+                                     <li><a href="california_expendition.html"><strong>2010 California to Bali Solo</strong></a></li>
+                                    </ul>
+                                
+                                </li>
+                             <li><a href="#"><strong>Join Us!</strong></a>
+                             	<ul>
+                                <li><a href="job.html"><strong>Job Opportunities</strong></a></li>
+                                <li><a href="ambassador.html"><strong>Ambassador Program</strong></a></li>
+                                <li><a href="volunteer.html"><strong>Ambassador Program</strong></a></li>
+                                </ul>
+                             
+                             </li>
+                             <li><p class="right_text"><strong><a href="faq.html">FAQ</a></strong></p></li>
+                             <li><p class="right_text"><strong><a href="contact.html">Contact</a></strong></p></li>
+							
+							
+						</ul>
+				
+			</div>
+        </div>        
+</div>
+
+
+<div class="main_div home_main_div">
+
+	<div class="container inner_home">
+      
+    <div class="home_navigation">
+		<ul>
+                 <li class="yellow"><a href="community.html"><p class="left_img"><img src="images/comment2.png"></p>
+				<p class="right_text"><strong>Community</strong></p></a>
+				</li>
+				<li class="grey"><a href="category.html"><p class="left_img"><img src="images/shop.png"></p>
+				<p class="right_text"><strong>Shop</strong></p></a>
+				</li>
+                <li class="blue quote_form"><a href="login.html"><p class="left_img"><img src="images/quote_form.png"></p>
+				<p class="right_text"><strong>quote form</strong></p></a>
+				</li>         
+                <li class="orange"><a href="special.html"><p class="left_img"><img src="images/special.png"></p>
+				<p class="right_text"><strong>Deals</strong></p></a>
+				</li>
+				<li class="account_login light_grn"><a href="login.html"><p class="left_img"><img src="images/account.png"></p>
+				<p class="right_text"><strong>My account</strong></p></a>
+				</li>
+                <li class="after_login light_grn"><a href="account.html"><p class="left_img"><img src="images/account.png"></p>
+				<p class="right_text"><strong>My account</strong></p></a>
+				</li>
+                <li class="cntct_li pink"><a href="faq.html"><p class="left_img"><img src="images/faq.png"></p>
+				<p class="right_text"><strong>Faq</strong></p></a>
+				</li>
+			</ul>
+	</div>
+</div>
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <!-- Modal content-->
+    <div class="modal-content">
+      
+            <div class="modal-body">
+            <div class="innertext">	
+                <ul class="close_open_ul">                                            
+                        <li><button type="button" class="btn btn-default" data-dismiss="modal"><img src="images/cancel.png"></button></li>
+                   </ul>
+                   <ul>                                           
+                          <li><a href="https://www.facebook.com/bluesailsco" target="_blank"><img src="images/pop_upfb.jpg"></a></li>
+                          <li><a href="https://twitter.com/bluesailsco" target="_blank"><img src="images/pop_upg+.jpg"></a></li>
+                          <li><a href="https://id.linkedin.com/in/bluesails" target="_blank"><img src="images/pop_upin.jpg"></a></li>
+                          <li><a href="https://plus.google.com/103562994741176248240/posts" target="_blank"><img src="images/pop_uptw.jpg"></a></li>
+                          <li><a href="https://www.youtube.com/channel/UCGNfkfSbjth8rE2k40pgXJw" target="_blank"><img src="images/pop_upyou_tube.jpg"></a></li>
+                   </ul>            
+            </div>
+        </div>    
+    </div>
+  </div>
+</div>
+<script src="js/jquery.simpler-sidebar.min.js"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		jQuery('#main-sidebar').simplerSidebar({
+		opener: '#toggle-sidebar',
+		top: 42,
+		animation: {
+			easing: "easeOutQuint"
+		},
+		sidebar: {
+			align: 'left',
+			closingLinks: '.close-sb'
+		}
+		});
+
+	});
+</script>
+</body>	
+</html>

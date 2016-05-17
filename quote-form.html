@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bluesails Quote Form</title>
+<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" type="text/css" href="css/vmenuModule.css" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/vmenuModule.js"></script>
+<script type="text/javascript" src="./js/function.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/bootstrap1.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+  	
+	jQuery( document ).on( "mobileinit", function() {
+		jQuery.mobile.allowCrossDomainPages = true;
+	});
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+    if(window.XDomainRequest){contentType = "text/plain";}
+	jQuery.support.cors = true;	
+
+	jQuery.getJSON("http://jsonip.com/?callback=?", function (data) {
+        var uiid = unescape(data.ip);
+		var encodedString = btoa(uiid);		
+		var device_id = encodedString;		
+		
+	if(localStorage.getItem('userInfo') == null){	   
+	    var uid = 0;			
+	}else{		
+		var uid = localStorage.getItem('userInfo');
+	}
+	
+	// main nav
+	
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: siteurl + '/api/new_nav.php', 
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(menulist){				
+				jQuery("#main-sidebar").html(menulist['nav']);
+			
+		 }			
+  	});
+	
+	// end nav
+		
+	var carturl = siteurl+'/api/cart.php'; 
+		
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: carturl, 		
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(res){
+			
+				var cart_data = "<div class='totalcart_result'>0</div>" ;
+				if(parseInt(res['totalitems']) > 0)
+				{
+					 cart_data = "<div class='totalcart_result'>"+res['totalitems']+"</div>" ;
+				}
+				
+				jQuery(".cart_result").append(cart_data);
+			
+		 }			
+	});
+	
+	
+	jQuery('.totalcart').live("click", function(){
+		jQuery.ajax({  
+			 type: 'GET',  
+			 url: carturl, 			
+			 dataType: 'json',
+			 data: {user_id:uid,device_id:device_id},
+			 beforeSend: function() {
+				jQuery(".loading").show();					
+			 },		
+			 complete: function() {
+					jQuery(".loading").hide();					
+			 },    
+			 crossDomain: true,  
+			 success: function(pro){
+				
+				if(parseInt(pro['totalitems']) > 0)
+				{				
+										
+					window.location='cart.html?siteurl='+siteurl+'&uid='+uid+'&device_id='+device_id;					
+				}
+			}
+		});
+	});
+	
+
+	var quote_url = siteurl+'/api/quote.php';
+	jQuery.ajax({  
+		 type: 'POST',  
+		 url: quote_url + '?get_quote=get_info',  		
+		 dataType: 'json', 
+		 data: {user_id:uid}, 
+		 crossDomain: true,  
+		 success: function(date){							
+				jQuery(".quote_frm").html(date['form_info']);
+			
+		 }			
+	});		
+	
+	jQuery(".submit_quote").live("click", function(){		
+		jQuery.ajax({  
+		 type: 'POST',  
+		 url: quote_url + '?submit_quote=submit&user_id=' + localStorage.getItem('userInfo'),  		
+		 dataType: 'json', 
+		 data: jQuery('.quote_frm input[type="text"], .quote_frm select, .quote_frm input[type="checkbox"]:checked, .quote_frm input[type="radio"]:checked'), 
+		 beforeSend: function() {
+			jQuery(".loading").show();					
+		 },		
+		 complete: function() {
+				jQuery(".loading").hide();					
+		 },
+		 crossDomain: true,  
+		 success: function(data){			 
+			 	jQuery(".inputerror").remove();							
+				
+				if(data['error'])
+				{				
+					if(data['error']['fname'])
+					{
+						jQuery('input[name="fname"]').after('<span class="inputerror">' + data['error']['fname'] + '</span>');	
+					}				
+					if(data['error']['lname'])
+					{
+						jQuery('input[name="lname"]').after('<span class="inputerror">' + data['error']['lname'] + '</span>');	
+					}				
+					if(data['error']['email'])
+					{
+						jQuery('input[name="email"]').after('<span class="inputerror">' + data['error']['email'] + '</span>');	
+					}				
+					if(data['error']['phone'])
+					{
+						jQuery('input[name="phone"]').after('<span class="inputerror">' + data['error']['phone'] + '</span>');	
+					}
+					
+					if(data['error']['address1'])
+					{
+						jQuery('input[name="address1"]').after('<span class="inputerror">' + data['error']['address1'] + '</span>');	
+					}
+									
+					if(data['error']['city'])
+					{
+						jQuery('input[name="city"]').after('<span class="inputerror">' + data['error']['city'] + '</span>');	
+					}
+					
+					
+					if(data['error']['state'])
+					{
+						jQuery('input[name="state"]').after('<span class="inputerror">' + date['error']['state'] + '</span>');	
+					}
+					
+					if(data['error']['zipcode'])
+					{
+						jQuery('input[name="zipcode"]').after('<span class="inputerror">' + data['error']['zipcode'] + '</span>');	
+					}
+					
+					if(data['error']['country'])
+					{
+						jQuery('select[name="country"]').after('<span class="inputerror">' + data['error']['country'] + '</span>');	
+					}
+					
+					if(data['error']['boat_type'])
+					{
+						jQuery('input[name="boat_type"]').after('<span class="inputerror">' + data['error']['boat_type'] + '</span>');	
+					}
+					
+					if(data['error']['sail_type'])
+					{
+						jQuery('select[name="sail_type"]').after('<span class="inputerror">' + data['error']['sail_type'] + '</span>');	
+					}
+					
+					if(data['error']['plese_quote'])
+					{
+						jQuery('select[name="plese_quote"]').after('<span class="inputerror">' + data['error']['plese_quote'] + '</span>');	
+					}
+					if(data['error']['referral_id'])
+					{
+						jQuery('input[name="referral_id"]').after('<span class="inputerror">' + data['error']['referral_id'] + '</span>');	
+					}				
+				}else if(data['success']['message'])	
+				{
+					jQuery('.quote_frm input[type="text"]').val('');
+					jQuery('.quote_frm select').val('');					
+					jQuery(".submit_btn").before(data['success']['message']);
+					
+				}				
+		 	}			
+		});	
+		
+		});	
+	});
+});
+</script>
+</head>
+<body>
+<div class="header">
+		<div class="home_top_img">		
+			<div class="logo"><a href="home.html"><img src="images/logo2.png"></a></div>
+            <div class="snd_home_img"><img src="images/blue_sail4.png"></div>
+            </div>
+        <div class="header_snd_part">
+            <div id="main-navbar" class="main-navbar main-navbar-fixed-top">
+           
+            <div class="main-navbar-content">
+                <div id="toggle-sidebar" class="icon left">
+                    <img alt="menu" src="assets/menu32@64.png" width=24px height="24px">
+                </div>
+            </div>
+             <li><a href="home.html"><img src="images/home1.png"></a></li>
+        	</div>
+            <div class="snd_div_header">
+            <div class="sarch_div">
+            <form class="searchbox">
+        		<input type="search" placeholder="Search Products......" name="search_keyword" class="searchbox-input">       
+        		<a href="javascript:void(0);" class="searchbox-submit" ><img src="images/search.png"></a>       
+    		</form>
+            </div>
+            <div class="footer">
+            <ul class="footer_img">
+            <li class="account_sign"><a href="login.html"><img src="images/login1.png"></a></li>
+            <li class="account_signout"><a href="logout.html"><img src="images/logout1.png"></a></li>
+            <li><div class="main_btnbox"><div class="buttonbox" data-toggle="modal" data-target='#myModal'><button><img src="images/share1.png"></button></div></div></li>
+            </ul>
+            </div>
+            
+			<div class="headr_right">
+				<ul>                
+                	<li class="totalcart"><img src="images/cart1.png"><div class="cart_result"></div></li>
+				</ul>
+			</div>
+            </div>
+	</div>		
+      
+        <div id="main-sidebar" class="main-sidebar main-sidebar-left"></div>        
+</div>
+    <div class="main_div">
+  <div class="container">
+    
+    <div class="signin_div">
+     
+      <div class="top_div"><ul><li class="active">Sail Quote Form</li></ul>
+      </div>     
+      <div class="quote_frm"></div>    
+    </div>
+    
+    
+  </div>
+</div>
+
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      
+            <div class="modal-body">
+                                <div class="innertext">	
+								    <ul class="close_open_ul">                                            
+                                            <li><button type="button" class="btn btn-default" data-dismiss="modal"><img src="images/cancel.png"></button></li>
+                                            </ul>
+                                            <ul>                                           
+                                              <li><a href="https://www.facebook.com/bluesailsco" target="_blank"><img src="images/pop_upfb.jpg"></a></li>
+                                              <li><a href="https://plus.google.com/103562994741176248240/posts" target="_blank"><img src="images/pop_upg+.jpg"></a></li>
+                                              <li><a href="https://id.linkedin.com/in/bluesails" target="_blank"><img src="images/pop_upin.jpg"></a></li>
+                                              <li><a href="https://twitter.com/bluesailsco" target="_blank"><img src="images/pop_uptw.jpg"></a></li>
+                                              <li><a href="https://www.youtube.com/channel/UCGNfkfSbjth8rE2k40pgXJw" target="_blank"><img src="images/pop_upyou_tube.jpg"></a></li>
+                                            </ul>
+                                
+                                </div>
+            </div>    
+    </div>
+  </div>
+</div>
+<div class="loading"><div id="wait"><img src='images/demo_wait.gif' width="64" height="64" /><br>Please wait..</div></div>
+<script src="js/jquery.simpler-sidebar.min.js"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		jQuery('#main-sidebar').simplerSidebar({
+		opener: '#toggle-sidebar',
+		top: 42,
+		animation: {
+			easing: "easeOutQuint"
+		},
+		sidebar: {
+			align: 'left',
+			closingLinks: '.close-sb'
+		}
+		});
+	});
+</script>
+</body>
+</html>

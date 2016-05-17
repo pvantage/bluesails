@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bluesails</title>
+<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+jQuery.getJSON("http://jsonip.com/?callback=?", function (data) {       
+        var uiid = unescape(data.ip);
+		var encodedString = btoa(uiid);				
+		var device_id = encodedString;    
+	jQuery( document ).on( "mobileinit", function() {
+		jQuery.mobile.allowCrossDomainPages = true;
+	});
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+    if(window.XDomainRequest){contentType = "text/plain";}
+	jQuery.support.cors = true;
+	
+		
+	if(localStorage.getItem('userInfo') == null){	   
+	   var uid = 0;	
+	   
+	   jQuery.ajax({  
+			 type: 'GET',  
+			 url: siteurl + '/api/delete_cart_items.php', 
+			 dataType: 'json', 
+			 data: {device_id:device_id}, 
+			 crossDomain: true,  
+			 success: function(menulist){				
+					
+				
+			 }			
+		});	
+	}
+	else
+	{		
+		var uid = localStorage.getItem('userInfo');		
+	}
+	
+		
+	
+		
+		setTimeout(function(){ location = "home.html"; }, 6000);	
+	});
+});
+</script>
+</head>
+<body class="home_body">
+<div class="main_div index_main_div">
+	<div class="container home_cntainer">		
+			<div class="home_img">
+			<img src="images/hm1.png">
+			<div class="home_inner">
+				<div class="get_btn">
+				<div class="inner_imges">
+				<div class="logo_part"><img src="images/logo3.png"></div>
+				<div class="blue_sail"><img src="images/blue_sail3.png"></div>			
+				</div>				
+				<!--<a class="new_home_btn" href="home.html">get started</a>-->
+				</div>
+			</div>
+			</div>
+	</div>
+</div>
+</body>		
+</html>

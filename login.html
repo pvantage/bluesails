@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Bluesails</title>
+<link href="tab.css" rel = "stylesheet">
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+<link rel="stylesheet" href="style.css"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<script type="text/javascript" src="js/config.js"></script>
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/vmenuModule.js"></script>
+<script type="text/javascript" src="./js/function.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script type="text/javascript" src="js/validate.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<link rel="stylesheet" type="text/css" href="css/vmenuModule.css" />
+<script type="text/javascript" src="js/bootstrap1.min.js"></script>
+<script type="text/javascript">
+jQuery(function() {
+	jQuery( "#login" ).tabs();
+});
+jQuery(document).ready(function(){
+
+jQuery.getJSON("http://jsonip.com/?callback=?", function (data) {
+       
+        var uiid = unescape(data.ip);
+		var encodedString = btoa(uiid);
+		var device_id = encodedString;    
+	
+	jQuery( document ).on( "mobileinit", function() {
+		jQuery.mobile.allowCrossDomainPages = true;
+	});
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+    if(window.XDomainRequest){contentType = "text/plain";}
+	jQuery.support.cors = true;
+	
+	
+	if(localStorage.getItem('userInfo') == null){	   
+	   var uid = 0;		
+	}else{		
+		var uid = localStorage.getItem('userInfo');
+		
+	}	
+			
+	// main nav
+	
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: siteurl + '/api/new_nav.php', 
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(menulist){				
+				jQuery("#main-sidebar").html(menulist['nav']);
+			
+		 }			
+  	});
+	
+	// end nav
+	
+	var carturl = siteurl+'/api/cart.php';
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: carturl,  		 
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(res){
+			 var cart_data = "<div class='totalcart_result'>0</div>" ;
+				if(parseInt(res['totalitems']) > 0)
+				{
+					 cart_data = "<div class='totalcart_result'>"+res['totalitems']+"</div>" ;
+				}
+				jQuery(".cart_result").append(cart_data);
+			
+		 }			
+	});
+	
+	jQuery('#log_in').live("click", function(){		
+				
+		var user_login=jQuery('#username').val();
+		var user_pass=jQuery('#pwd').val();
+		
+		var url=siteurl+'/api/login.php';		
+		
+         jQuery.ajax({  
+         type: 'POST',  
+         url: url,           
+         dataType: 'json',  
+         data: {user_login:user_login,user_pass:user_pass,checkuserlogin:1, user_device_id: device_id}, 
+		 beforeSend: function() {
+				jQuery(".loading").show();					
+		 },		
+		 complete: function() {
+				jQuery(".loading").hide();					
+		 }, 
+         crossDomain: true,  
+         success: function(res) {  
+			jQuery('#form1 label.error').remove();
+            if(res['success'])
+		    {
+				localStorage.setItem('userInfo', res['success']['userid']);
+				window.location ='category.html';
+		    }else if(res['error']){				
+				
+				if(res['error']['login_email']){					
+					jQuery('#username').after('<label class="error" for="username" generated="true">'+ res['error']['login_email'] +'</label>');				
+				}
+				
+				if(res['error']['user_pass']){					
+					jQuery('#pwd').after('<label class="error" for="pwd" generated="true">'+ res['error']['user_pass'] +'</label>');				
+				}
+			}
+			
+         }         
+       });	   
+});
+	
+	jQuery('input[name="pwd"]').on('keydown', function(e) {
+		  if (e.keyCode == 13) {
+			jQuery("#log_in").trigger("click");
+			 
+		   }
+	    });
+			
+		
+	jQuery('#sign_up').live('click', function(){		
+		var fname=jQuery('#fname').val();
+		var lname=jQuery('#lname').val();
+		var email=jQuery('#email').val();
+		var pwd=jQuery('#password').val();
+		var pwd2=jQuery('#cpassword').val();		
+				
+		var reg_url = siteurl+'/api/register.php';
+		jQuery.ajax({  
+         type: 'POST',  
+         url: reg_url,
+         dataType: 'json',  
+         data: {fname:fname,lname:lname,email:email,pwd:pwd,pwd2:pwd2,registered:1,customer_ip:device_id},  
+		 beforeSend: function() {
+				jQuery(".loading").show();					
+		 },		
+		 complete: function() {
+				jQuery(".loading").hide();					
+		 },
+         crossDomain: true,  
+         success: function(res) {
+		 
+			if(res['req']=='success')
+			{
+				 alert(res['success']['message']);
+				 var userid = res['success']['login_user_id'] ;
+				 localStorage.setItem('userInfo', userid);
+				 window.location='category.html?siteurl='+siteurl;
+			}else if(res['error'])
+			{
+				
+				jQuery('#form2 label.error').remove();
+				
+				if(res['error']['fname'])
+				{
+					jQuery('#fname').after('<label class="error" for="fname" generated="true">'+ res['error']['fname'] +'</label>');	
+				}
+				
+				if(res['error']['lname'])
+				{
+					jQuery('#lname').after('<label class="error" for="lname" generated="true">'+ res['error']['lname'] +'</label>');	
+				}
+				
+				if(res['error']['email'])
+				{
+					jQuery('#email').after('<label class="error" for="email" generated="true">'+ res['error']['email'] +'</label>');	
+				}
+				
+				if(res['error']['password'])
+				{
+					jQuery('#password').after('<label class="error" for="password" generated="true">'+ res['error']['password'] +'</label>');	
+				}
+				
+				if(res['error']['cpassword'])
+				{
+					jQuery('#cpassword').after('<label class="error" for="cpassword" generated="true">'+ res['error']['cpassword'] +'</label>');	
+				}				
+			}
+		 }
+	   });
+		 //return false;
+	});
+	
+    jQuery("#submit_form").click(function()
+    {
+		var gettab = jQuery(".ui-tabs-nav .ui-state-active a").attr("id"); 	
+		
+		if(gettab == 'ui-id-2')
+		{
+			jQuery("#sign_up").trigger('click');
+		}else{
+			jQuery("#log_in").trigger('click');
+		}
+		
+		
+	});
+	
+	
+	
+	jQuery('.totalcart').click(function(){
+		jQuery.ajax({  
+			 type: 'GET',  
+			 url: carturl, 			 
+			 dataType: 'json',
+			 data: {user_id:uid,device_id:device_id},    
+			 crossDomain: true,  
+			 success: function(pro){
+				if(pro['cartinfo'])
+				{
+					window.location='cart.html?siteurl='+siteurl+'&uid='+uid+'&device_id='+device_id;					
+				}
+			}
+		});
+	});
+});
+});
+
+var myWindow=null;
+function fblogin(){
+    var appId =396797113702689;/** facebook application id */
+    var URLAfterAuth = 'http://www.bluesails.co/api/fb.html';/* After authentication go to this page **/
+    var str= window.location.href;
+    if (myWindow && !myWindow.closed) { //exist and is not closed
+        myWindow.close();
+        myWindow=null; //delete the object
+
+    }else{            
+            myWindow = window.open('https://www.facebook.com/dialog/oauth?redirect_uri='+URLAfterAuth+'&display=popup&response_type=code&client_id='+appId+'&ret=login', 'mywindow','left=100,top=50,width=500,height=500,toolbar=0,resizable=0');                       
+
+    }
+
+}
+</script>
+<style>
+#login {
+	font-size: 14px;
+}
+.ui-widget-header {
+	font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div class="header">
+		<div class="home_top_img">		
+			<div class="logo"><a href="home.html"><img src="images/logo2.png"></a></div>
+            <div class="snd_home_img"><img src="images/blue_sail4.png"></div>
+        </div>
+        <div class="header_snd_part">
+            <div id="main-navbar" class="main-navbar main-navbar-fixed-top">           
+            <div class="main-navbar-content">
+                <div id="toggle-sidebar" class="icon left">
+                    <img alt="menu" src="assets/menu32@64.png" width=24px height="24px">
+                </div>
+            </div>
+             <li><a href="home.html"><img src="images/home1.png"></a></li>
+        	</div>
+            <div class="snd_div_header">
+            <div class="sarch_div">
+            <form class="searchbox">
+        		<input type="search" placeholder="Search Products......" name="search_keyword" class="searchbox-input">       
+        		<a href="javascript:void(0);" class="searchbox-submit" ><img src="images/search.png"></a>       
+    		</form>
+            </div>
+            <div class="footer">
+            <ul class="footer_img">
+            <li class="account_sign"><a href="login.html"><img src="images/login1.png"></a></li>
+            <li class="account_signout"><a href="logout.html"><img src="images/logout1.png"></a></li>
+            <li><div class="main_btnbox"><div class="buttonbox" data-toggle="modal" data-target='#myModal'><button><img src="images/share1.png"></button></div></div></li>
+            </ul>
+            </div>
+            
+			<div class="headr_right">
+				<ul>                
+                	<li class="totalcart"><img src="images/cart1.png"><div class="cart_result"></div></li>
+				</ul>
+			</div>
+            </div>
+	</div>		
+      
+        <div id="main-sidebar" class="main-sidebar main-sidebar-left"></div>        
+</div>
+<div class="main_div">
+  <div class="container">    
+    <div id="login" class="signin_div form_submit">  
+      <div class="top_part">
+        <p>Account<img class="submit_arrow" src="images/submit_arrow.png" id="submit_form"></p>
+      </div>
+      <ul>
+        <li data-id="sign_in"><a href="#signin">Sign In</a></li>
+        <li><span class="ui-tabs-anchor">/</span></li>
+        <li data-id="sign_up"><a href="#signup">Sign Up</a></li>
+      </ul>
+      <div id="signin">
+        <div class="content">
+        <form id="form1" method="post">
+          <ul>
+            <li>
+              <input type="text" name="username" id="username" placeholder="Email Address" class="required">
+            </li>
+            <li>
+              <input type="password" name="pwd" id="pwd" placeholder="Password" class="required">
+              <input type="hidden" name="log_in" id="log_in">
+            </li>
+          </ul>
+         </form>
+         <div class="social_div">
+            <ul>
+              <li class="forgotbox"><a href="forgot_password.html">Forgot your password ?</a> </li>             
+            </ul>
+          </div>
+          
+        </div>
+      </div>
+      <div id="signup">
+        <div class="content">
+          <form id="form2" method="post">
+          <ul>
+            <li>
+              <input type="text" name="fname" id="fname" placeholder="First Name" class="required">
+            </li>
+            <li>
+              <input type="text" name="lname" id="lname" placeholder="Last Name" class="required">
+            </li>
+            <li>
+              <input type="text" name="email" id="email" placeholder="Email Address" class="required">
+            </li>
+            <li>
+              <input type="password" name="password" id="password" placeholder="Password" class="required">
+            </li>
+            <li>
+              <input type="password" name="cpassword" id="cpassword" placeholder="Confirm Password" class="required">
+              <input type="hidden" name="sign_up" id="sign_up">
+            </li>
+          </ul>
+          </form>          
+        </div>
+      </div>
+    </div>
+    
+  </div>
+</div>
+
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">      
+            <div class="modal-body">
+                                <div class="innertext">									
+								
+								    <ul class="close_open_ul">
+                                            
+                                            <li><button type="button" class="btn btn-default" data-dismiss="modal"><img src="images/cancel.png"></button></li>
+                                            </ul>
+                                            <ul>                                           
+                                              <li><a href="https://www.facebook.com/bluesailsco" target="_blank"><img src="images/pop_upfb.jpg"></a></li>
+                                              <li><a href="https://plus.google.com/103562994741176248240/posts" target="_blank"><img src="images/pop_upg+.jpg"></a></li>
+                                              <li><a href="https://id.linkedin.com/in/bluesails" target="_blank"><img src="images/pop_upin.jpg"></a></li>
+                                              <li><a href="https://twitter.com/bluesailsco" target="_blank"><img src="images/pop_uptw.jpg"></a></li>
+                                              <li><a href="https://www.youtube.com/channel/UCGNfkfSbjth8rE2k40pgXJw" target="_blank"><img src="images/pop_upyou_tube.jpg"></a></li>
+                                            </ul>
+                                </div>
+            </div>    
+    </div>
+  </div>
+</div>
+
+<div class="loading"><div id="wait"><img src='images/demo_wait.gif' width="64" height="64" /><br>Please wait..</div></div>
+<script src="js/jquery.simpler-sidebar.min.js"></script>
+<script>
+	jQuery(document).ready(function() {
+		jQuery('#main-sidebar').simplerSidebar({
+		opener: '#toggle-sidebar',
+		top: 42,
+		animation: {
+			easing: "easeOutQuint"
+		},
+		sidebar: {
+			align: 'left',
+			closingLinks: '.close-sb'
+		}
+		});
+	});
+</script>
+</body>
+</html>

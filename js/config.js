@@ -1,0 +1,1 @@
+var siteurl = "http://www.bluesails.co";

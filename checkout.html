@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Checkout</title>
+<link rel="stylesheet" type="text/css" href="demo.css">
+<link rel="stylesheet" type="text/css" href="css/style.css" />
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/vmenuModule.js"></script>
+<script type="text/javascript" src="./js/function.js"></script>
+<script src = "js/jquery-ui.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/validate.js"></script>
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/bootstrap1.min.js"></script>
+<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" type="text/css" href="css/vmenuModule.css" />
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+    if(window.XDomainRequest){contentType = "text/plain";}
+	jQuery.support.cors = true;
+	var siteurl=gup('siteurl', window.location.href);
+
+	
+jQuery.getJSON("http://jsonip.com/?callback=?", function (data) {
+        var uiid = unescape(data.ip);
+		var encodedString = btoa(uiid);		
+		
+		var device_id = encodedString;	
+		
+		if(localStorage.getItem('userInfo') == null){	   
+		    var uid = 0;						
+		}else{		
+			var uid = localStorage.getItem('userInfo');					
+			jQuery(".customer_login").remove();
+			jQuery(".register_account_visibility").remove();
+		}
+	
+	// main nav
+	
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: siteurl + '/api/new_nav.php', 
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(menulist){				
+				jQuery("#main-sidebar").html(menulist['nav']);
+			
+		 }			
+  	});
+	
+	// end nav	
+		
+		
+	
+	jQuery("#checkout").validate();		
+
+	jQuery('#login').submit(function(){		
+		
+		var user_login=jQuery('#username').val();
+		var user_pass=jQuery('#pwd').val();		
+		var url=siteurl+'/api/login.php';
+				
+		jQuery.ajax({  
+         type: 'POST',  
+         url: url,          
+         dataType: 'json',  
+		 beforeSend: function() {
+				jQuery(".loading").show();					
+		 },		
+		 complete: function() {
+				jQuery(".loading").hide();					
+		 },
+         data: {user_login:user_login,user_pass:user_pass,checkuserlogin:1},  
+         crossDomain: true,  
+         success: function(res) {  
+			
+            if(res['login']=='success')
+		    {				
+				window.location='checkout.html?siteurl='+siteurl+'&user_login='+user_login+'&user_pass='+user_pass+'&login_user_id='+res['userid'];
+		    }
+			else
+			{
+				jQuery('body .bodyoverlay').remove();
+				jQuery('body .popupbox').remove();
+				var html='<div class="bodyoverlay"></div><div class="popupbox errorbox"><div class="popupimg"><img src="images/error.png" /></div><h1 class="success">ERROR</h1><h1>Login detail is wrong.</h1><button class="okbox">OK</button></div>';
+				jQuery('body').append(html);
+				
+				jQuery('.okbox').click(function(){
+					jQuery('body .bodyoverlay').remove();
+					jQuery('body .popupbox').remove();
+				});
+			}
+			
+         },  
+         error: function(response, d, a){
+            jQuery('body .bodyoverlay').remove();
+			jQuery('body .popupbox').remove();
+			var html='<div class="bodyoverlay"></div><div class="popupbox errorbox"><div class="popupimg"><img src="images/error.png" /></div><h1 class="success">ERROR</h1><h1>Server Error.</h1><button class="okbox">OK</button></div>';
+			jQuery('body').append(html);
+			
+			jQuery('.okbox').click(function(){
+				jQuery('body .bodyoverlay').remove();
+				jQuery('body .popupbox').remove();
+			}); 
+         },  
+         complete: function(data) {  
+		 }  
+       });
+	   return false;
+	});
+
+		
+	var carturl = siteurl+'/api/cart.php'; 
+	
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: carturl,		
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(res){			
+				
+				var cart_data = "<div class='totalcart_result'>0</div>";
+				var final_payment = '$0.00';
+				
+				if(parseInt(res['totalitems']) > 0)
+				{
+					var cart_data = "<div class='totalcart_result'>"+res['totalitems']+"</div>";
+				}
+				
+				if(parseFloat(res['totalitems']) > 0.00)
+				{
+					final_payment = '$' + res['totalprice'];
+				}
+				
+				
+				jQuery(".payment").html(final_payment);
+				
+				jQuery(".cart_result").html(cart_data);
+			
+		 }			
+	});
+	
+	
+	var userinfo = siteurl+'/api/checkout.php?getuserinfo=true';
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: userinfo, 		
+		 dataType: 'json',
+		 beforeSend: function() {
+				jQuery(".loading").show();					
+		 },		
+		 complete: function() {
+				jQuery(".loading").hide();					
+		 }, 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(res){
+			 
+				jQuery(".user_data .billing_details").append(res['billing_info']);				
+				jQuery(".user_data .shipping_details").append(res['shipping_info']);
+				
+	
+  
+ 	jQuery('#process_checkout').live("click", function(){		
+		var fname=jQuery('input[name="fname"]').val();		
+		var lname=jQuery('input[name="lname"]').val();
+		var email=jQuery('input[name="email"]').val();
+		var country=jQuery('select[name="country"]').val();
+		var state=jQuery('input[name="state"]').val();
+		var city=jQuery('input[name="city"]').val();
+		var address=jQuery('input[name="address"]').val();
+		var zipcode=jQuery('input[name="zipcode"]').val();
+		var phone=jQuery('input[name="phone"]').val();
+		
+		var ship_fname=jQuery('input[name="ship_fname"]').val();
+		var ship_lname=jQuery('input[name="ship_lname"]').val();
+		var ship_country=jQuery('select[name="ship_country"]').val();
+		var ship_state=jQuery('input[name="ship_state"]').val();
+		var ship_address=jQuery('input[name="ship_address"]').val();
+		var ship_zipcode=jQuery('input[name="ship_zipcode"]').val();
+		var ship_phone=jQuery('input[name="ship_phone"]').val();
+		var ship_city=jQuery('input[name="ship_city"]').val();
+		var ship_email=jQuery('input[name="ship_email"]').val();
+		
+		var same_as_billing = 0;
+		
+		if(jQuery('input[name="same_as_billing"]:checked').val() == 1)
+		{
+			same_as_billing = 1;	
+		}
+		
+		var register_account = 0;
+		
+		if(jQuery('input[name="register_account"]:checked').val() == 1)
+		{
+			register_account = 1;	
+		}
+		
+		
+		var checkout_url=siteurl+'/api/checkout.php?action=checkoutorder';
+		jQuery.ajax({  
+         type: 'POST',  
+         url: checkout_url,
+         dataType: 'json', 
+		 beforeSend: function() {
+				jQuery(".loading").show();					
+		 },		
+		 complete: function() {
+				jQuery(".loading").hide();					
+		 }, 
+         data: {user_id:uid,device_id:device_id,fname:fname,lname:lname,email:email,country:country,city:city,state:state,address:address,zipcode:zipcode,phone:phone,ship_fname:ship_fname,ship_lname:ship_lname,ship_country:ship_country,ship_state:ship_state,ship_city:ship_city,ship_email:ship_email,ship_address:ship_address,ship_zipcode:ship_zipcode,ship_phone:ship_phone,updateaccount:1, same_as_billing: same_as_billing,register_account:register_account},  
+         crossDomain: true,  
+         success: function(res) {	
+		 
+		 jQuery(".loading").hide();		
+		 
+		 jQuery(".inputerror").remove();
+		 			
+			if(res['error'])
+			{				
+				if(res['error']['fname'])
+				{
+					jQuery('input[name="fname"]').after('<span class="inputerror">' + res['error']['fname'] + '</span>');	
+				}				
+				if(res['error']['lname'])
+				{
+					jQuery('input[name="lname"]').after('<span class="inputerror">' + res['error']['lname'] + '</span>');	
+				}				
+				if(res['error']['email'])
+				{
+					jQuery('input[name="email"]').after('<span class="inputerror">' + res['error']['email'] + '</span>');	
+				}				
+				if(res['error']['address'])
+				{
+					jQuery('input[name="address"]').after('<span class="inputerror">' + res['error']['address'] + '</span>');	
+				}
+				
+				if(res['error']['city'])
+				{
+					jQuery('input[name="city"]').after('<span class="inputerror">' + res['error']['city'] + '</span>');	
+				}
+								
+				if(res['error']['country'])
+				{
+					jQuery('input[name="country"]').after('<span class="inputerror">' + res['error']['country'] + '</span>');	
+				}
+				if(res['error']['phone'])
+				{
+					jQuery('input[name="phone"]').after('<span class="inputerror">' + res['error']['phone'] + '</span>');	
+				}
+				
+				if(res['error']['zipcode'])
+				{
+					jQuery('input[name="zipcode"]').after('<span class="inputerror">' + res['error']['zipcode'] + '</span>');	
+				}
+				
+				if(res['error']['ship_fname'])
+				{
+					jQuery('input[name="ship_fname"]').after('<span class="inputerror">' + res['error']['ship_fname'] + '</span>');	
+				}
+				
+				if(res['error']['ship_lname'])
+				{
+					jQuery('input[name="ship_lname"]').after('<span class="inputerror">' + res['error']['ship_lname'] + '</span>');	
+				}
+				
+				if(res['error']['ship_address'])
+				{
+					jQuery('input[name="ship_address"]').after('<span class="inputerror">' + res['error']['ship_address'] + '</span>');	
+				}
+				
+				if(res['error']['ship_email'])
+				{
+					jQuery('input[name="ship_email"]').after('<span class="inputerror">' + res['error']['ship_email'] + '</span>');	
+				}
+				
+				if(res['error']['ship_city'])
+				{
+					jQuery('input[name="ship_city"]').after('<span class="inputerror">' + res['error']['ship_city'] + '</span>');	
+				}
+				
+				if(res['error']['ship_country'])
+				{
+					jQuery('input[name="ship_country"]').after('<span class="inputerror">' + res['error']['ship_country'] + '</span>');	
+				}
+				if(res['error']['ship_phone'])
+				{
+					jQuery('input[name="ship_phone"]').after('<span class="inputerror">' + res['error']['ship_phone'] + '</span>');	
+				}
+				if(res['error']['ship_state'])
+				{
+					jQuery('input[name="ship_state"]').after('<span class="inputerror">' + res['error']['ship_state'] + '</span>');	
+				}
+				if(res['error']['ship_zipcode'])
+				{
+					jQuery('input[name="ship_zipcode"]').after('<span class="inputerror">' + res['error']['ship_zipcode'] + '</span>');	
+				}
+				
+			if(res['error']['account'])	
+			{	
+			  jQuery('body .bodyoverlay').remove();
+			jQuery('body .popupbox').remove();
+			var html='<div class="bodyoverlay"></div><div class="popupbox errorbox"><div class="popupimg"><img src="images/error.png" /></div><h1 class="success">ERROR</h1><h1>'+ res['error']['account'] + '</h1><button class="okbox">OK</button></div>';
+			jQuery('body').append(html);
+			
+			jQuery('.okbox').click(function(){
+				jQuery('body .bodyoverlay').remove();
+				jQuery('body .popupbox').remove();
+			});				
+		}					
+				
+		}else if(res['success'])
+			{
+				 
+				 if(res['auto_login'])
+				 {
+					localStorage.setItem('userInfo', res['auto_login']);
+					window.location='thank-you.html?siteurl='+siteurl+'&uid=' + res['auto_login'] + '&device_id='+device_id;	 
+				 }else{
+						 window.location='thank-you.html?siteurl='+siteurl+'&uid='+uid+'&device_id='+device_id; 
+				}			 
+				
+			}			
+		   }
+		 });
+		 	return false;
+	});
+	
+ }			
+});
+	
+	
+	// end checkout	
+
+jQuery("#checkout_login_btton").live("click", function(){
+	
+	var user_login = jQuery("#checkout_login").val();
+	var user_pass = jQuery("#checkout_password").val();
+	
+	var account_login = siteurl+'/api/login.php';
+	jQuery.ajax({  
+		 type: 'POST',  
+		 url: account_login,  		
+		 dataType: 'json', 
+		 beforeSend: function() {
+				jQuery(".loading").show();					
+		 },		
+		 complete: function() {
+				jQuery(".loading").hide();					
+		 },
+		 data: {user_login:user_login,user_pass:user_pass,checkuserlogin:1,user_device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(res){								
+				
+			if(res['success']['userid'] > 0)
+		    {
+				localStorage.setItem('userInfo', res['success']['userid']);				
+				window.location='checkout.html?siteurl='+siteurl+'&uid='+res['success']['userid']+'&device_id='+device_id+ '&getuserinfo=true';
+		    }
+			else
+			{
+				jQuery('body .bodyoverlay').remove();
+				jQuery('body .popupbox').remove();
+				var html='<div class="bodyoverlay"></div><div class="popupbox errorbox"><div class="popupimg"><img src="images/error.png" /></div><h1 class="success">ERROR</h1><h1>Login detail is wrong.</h1><button class="okbox">OK</button></div>';
+				jQuery('body').append(html);
+				
+				jQuery('.okbox').click(function(){
+					jQuery('body .bodyoverlay').remove();
+					jQuery('body .popupbox').remove();
+				});
+			}
+			
+		 }			
+	});
+	
+
+});
+
+	jQuery("#same_as_billing").live("click", function(){
+			
+		if(jQuery('input[name="same_as_billing"]:checked').val() == 1)
+		{
+			jQuery(".shipping_details").hide();
+		}else{
+			jQuery(".shipping_details").show();			
+		}
+		
+	});
+	
+		jQuery('.totalcart').live("click", function(){
+			window.location='cart.html?siteurl='+siteurl+'&uid='+uid+'&device_id='+device_id;
+	   });
+	});
+});
+</script>
+</head>
+<body>
+<div class="header">
+		<div class="home_top_img">		
+			<div class="logo">
+			<a href="home.html"><img src="images/logo2.png"></a>
+			</div>
+            <div class="snd_home_img">
+            <img src="images/blue_sail4.png">
+            </div>
+            </div>
+        <div class="header_snd_part">
+            <div id="main-navbar" class="main-navbar main-navbar-fixed-top">
+           
+            <div class="main-navbar-content">
+                <div id="toggle-sidebar" class="icon left">
+                    <img alt="menu" src="assets/menu32@64.png" width=24px height="24px">
+                </div>
+            </div>
+             <li><a href="home.html"><img src="images/home1.png"></a></li>
+        	</div>
+            <div class="snd_div_header">
+            <div class="sarch_div">
+            <form class="searchbox">
+        		<input type="search" placeholder="Search Products......" name="search_keyword" class="searchbox-input">       
+        		<a href="javascript:void(0);" class="searchbox-submit" ><img src="images/search.png"></a>       
+    		</form>
+            </div>
+            <div class="footer">
+            <ul class="footer_img">
+            <li class="account_sign"><a href="login.html"><img src="images/login1.png"></a></li>
+            <li class="account_signout"><a href="logout.html"><img src="images/logout1.png"></a></li>
+            <li><div class="main_btnbox"><div class="buttonbox" data-toggle="modal" data-target='#myModal'><button><img src="images/share1.png"></button></div></div></li>
+            </ul>
+            </div>
+            
+			<div class="headr_right">
+				<ul>                
+                	<li class="totalcart"><img src="images/cart1.png"><div class="cart_result"></div></li>
+				</ul>
+			</div>
+            </div>
+	</div>		
+      
+        <div id="main-sidebar" class="main-sidebar main-sidebar-left">
+            <div id="main-sidebar-wrapper" class="main-sidebar-wrapper"></div>
+        </div>        
+</div>
+<div class="main_div">
+	<div class="container">
+		
+			<div class="checkout_div">
+				<div class="top_div">
+				<ul>
+					<li class="active">CHECKOUT</li>
+				</ul>
+				</div>
+                
+                <div class="customer_login">
+                	<section class="ac-container faq_accordian">
+                    <div class="faq_acc1">
+                        <input id="ac-1" name="accordion-1" type="checkbox" />
+                        <label for="ac-1">Click here to login</label>
+                        <article class="ac-small">
+                        <p>If you have shopped with us before, please enter your details in the boxes below. If you are a new customer, please proceed to the Billing & Shipping section.</p>
+                            
+                              <ul class="checkout_ul">
+                                <li>
+                                  <input type="text" name="checkout_login" id="checkout_login" placeholder="Email Address" class="required">
+                                </li>
+                                <li>
+                                  <input type="password" name="checkout_password" id="checkout_password" placeholder="Password" class="required">
+                                </li>
+                                 <li>
+                                  <div class="submit_btn">
+                                    <input type="button" id="checkout_login_btton" name="submit" value="Submit" class="button"/>
+                                    </div>
+                                </li>
+                              </ul>
+                            
+                        </article>
+                    </div>
+                </section>
+                </div>
+                
+                
+					<div class="content checkout_div user_data">					
+                        <ul class="billing_details">
+						</ul>
+						<ul>
+						<li class="shipping">Ship to a same address? <input type="checkbox" id="same_as_billing" name="same_as_billing" value="1" /> <br></li>
+						</ul>
+                        <ul class="shipping_details"></ul>
+                        <div class="pay_div">
+                            <p>Amount to Pay</p>
+                            <p class="payment">$0.00</p>
+                        </div>
+						
+						<div class="text_content">
+                        <div class="direct_transfer"><p>Direct Bank Transfer</p>
+                        <div class="payment_txt"><p>Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order won’t be shipped or processed until the funds have cleared in our account</p></div>
+                            </div></div>
+                            
+                        <div class="text_content register_account_visibility">
+                        <ul>
+							<li class="shipping">Register Account<input type="checkbox" id="register_account" name="register_account" value="1" /></li>
+                            </ul>
+                        </div>    
+                         <p>&nbsp;</p>  
+                        <div class="submit_btn">
+                        <input type="button" name="submit" value="Submit" id="process_checkout" class="button"/>
+                        </div>
+					</div>
+			</div>
+	</div>
+</div>
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">      
+            <div class="modal-body">
+                                <div class="innertext">									
+								
+								    <ul class="close_open_ul">
+                                            
+                                            <li><button type="button" class="btn btn-default" data-dismiss="modal"><img src="images/cancel.png"></button></li>
+                                            </ul>
+                                            <ul>                                           
+                                              <li><a href="https://www.facebook.com/bluesailsco" target="_blank"><img src="images/pop_upfb.jpg"></a></li>
+                                              <li><a href="https://plus.google.com/103562994741176248240/posts" target="_blank"><img src="images/pop_upg+.jpg"></a></li>
+                                              <li><a href="https://id.linkedin.com/in/bluesails" target="_blank"><img src="images/pop_upin.jpg"></a></li>
+                                              <li><a href="https://twitter.com/bluesailsco" target="_blank"><img src="images/pop_uptw.jpg"></a></li>
+                                              <li><a href="https://www.youtube.com/channel/UCGNfkfSbjth8rE2k40pgXJw" target="_blank"><img src="images/pop_upyou_tube.jpg"></a></li>
+                                            </ul>
+                                </div>
+            </div>    
+    </div>
+  </div>
+</div>
+<div class="loading"><div id="wait"><img src='images/demo_wait.gif' width="64" height="64" /><br>Please wait..</div></div>
+<script src="js/jquery.simpler-sidebar.min.js"></script>
+<script type="text/javascript">
+	jQuery(document).ready(function() {
+		jQuery('#main-sidebar').simplerSidebar({
+		opener: '#toggle-sidebar',
+		top: 42,
+		animation: {
+			easing: "easeOutQuint"
+		},
+		sidebar: {
+			align: 'left',
+			closingLinks: '.close-sb'
+		}
+		});
+	});
+</script>
+</body>	
+</html>

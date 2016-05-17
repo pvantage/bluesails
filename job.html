@@ -1,0 +1,387 @@
+<!doctype html>
+<html lang = "en">
+<head>
+<meta charset = "utf-8">
+<title>Bluesails</title>
+<script src = "js/jquery.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/vmenuModule.js"></script>
+<script type="text/javascript" src="./js/function.js"></script>
+<script src = "js/jquery-ui.js" type="text/javascript"></script>
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+<link rel="stylesheet" href="style.css"/>
+<link rel="stylesheet" type="text/css" href="css/vmenuModule.css" />
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/bootstrap1.min.js"></script>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+    if(window.XDomainRequest){contentType = "text/plain";}
+	jQuery.support.cors = true;
+	var siteurl = "http://www.bluesails.co";	
+	var device_id = GetURLParameter('device_id');
+	
+jQuery.getJSON("http://jsonip.com/?callback=?", function (data) {
+        var uiid = unescape(data.ip);
+		var encodedString = btoa(uiid);			
+		var device_id = encodedString;
+	
+	if(localStorage.getItem('userInfo') == null){   
+	    var uid = 0;					
+	}else{
+		var uid = localStorage.getItem('userInfo');				
+	}
+	
+	// main nav
+	
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: siteurl + '/api/new_nav.php', 
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(menulist){				
+				jQuery("#main-sidebar").html(menulist['nav']);
+			
+		 }			
+  	});
+	
+	// end nav	
+	
+	var carturl = siteurl+'/api/cart.php'; 
+	var getloin = carturl + '?check_login=true';
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: getloin,  		 
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(res){
+			uid = res['log_id'];	
+		 }		
+	});
+	
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: carturl, 		
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(res){
+			
+				var cart_data = "<div class='totalcart_result'>0</div>" ;
+				if(parseInt(res['totalitems']) > 0)
+				{
+					var cart_data = "<div class='totalcart_result'>"+res['totalitems']+"</div>" ;
+				}
+				
+				jQuery(".cart_result").append(cart_data);
+			
+		 }			
+	});
+	
+	jQuery('.totalcart').live("click", function(){
+		jQuery.ajax({  
+			 type: 'GET',  
+			 url: carturl, 			
+			 dataType: 'json',
+			 data: {user_id:uid,device_id:device_id},    
+			 crossDomain: true,  
+			 success: function(pro){
+				
+				if(parseInt(pro['totalitems']) > 0)
+				{				
+										
+					window.location='cart.html?siteurl='+siteurl+'&uid='+uid+'&device_id='+device_id;					
+				}else{
+					alert("Cart is empty.");	
+				}
+			}
+			});
+		});	
+
+	jQuery("#job_cv_btton").live('click',(function(e) {
+		
+		var formData = new FormData();		
+		var candidate_name = jQuery('#candidate_name').val();
+		var customer_email = jQuery('#customer_email').val();
+		var customer_whatsapp = jQuery('#customer_whatsapp').val();
+		var customer_address = jQuery('#customer_address').val();
+		var customer_region = jQuery('#customer_region').val();
+		var customer_city = jQuery('#customer_city').val();
+		var customer_state = jQuery('#customer_state').val();
+		var customer_country = jQuery('#customer_country').val();	
+		var customer_about_us = jQuery('#customer_about_us').val();
+			
+		formData.append('customer_cv', jQuery('input[type=file]')[0].files[0]);		
+		formData.append('candidate_name', candidate_name);
+		formData.append('customer_email', customer_email);
+		formData.append('customer_whatsapp', customer_whatsapp);
+		formData.append('customer_address', customer_address);
+		formData.append('customer_region', customer_region);
+		formData.append('customer_city', customer_city);
+		formData.append('customer_state', customer_state);
+		formData.append('customer_country', customer_country);
+		formData.append('customer_about_us', customer_about_us);		
+			
+		jQuery.ajax({
+        	url: siteurl + '/api/job.php?action=cv',
+			type: "POST",
+			data:  formData,
+			contentType: false,
+			dataType: 'json', 
+    	    cache: false,
+			processData:false,
+			success: function(data)
+		    {
+				jQuery(".inputerror").remove();
+				
+				if(data['error'])
+				{
+					if(data['error']['candidate_name'])
+					{
+						jQuery('input[name="candidate_name"]').after('<p class="inputerror">' + data['error']['candidate_name'] + '</p>');	
+					}
+					
+					if(data['error']['customer_email'])
+					{
+						jQuery('input[name="customer_email"]').after('<p class="inputerror">' + data['error']['customer_email'] + '</p>');	
+					}
+					
+					if(data['error']['customer_about_us'])
+					{
+						jQuery('textarea[name="customer_about_us"]').after('<p class="inputerror">' + data['error']['customer_about_us'] + '</p>');	
+					}
+				}else if(data['success'])
+				{
+					jQuery('input[type="text"]').val('');
+					jQuery('textarea[name="customer_about_us"]').val('');
+					jQuery('textarea[name="customer_about_us"]').after('<p class="inputerror">' + data['success'] + '</p>');
+					
+				}
+				
+				
+		    }		  		        
+	   });
+	}));
+	
+});
+});
+</script>
+<style>
+#login {
+	font-size: 14px;
+}
+.ui-widget-header {
+	font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div class="header">
+		<div class="home_top_img">		
+			<div class="logo"><a href="home.html"><img src="images/logo2.png"></a></div>
+            <div class="snd_home_img">
+            <img src="images/blue_sail4.png">
+            </div>
+            </div>
+        <div class="header_snd_part">
+            <div id="main-navbar" class="main-navbar main-navbar-fixed-top">
+           
+            <div class="main-navbar-content">
+                <div id="toggle-sidebar" class="icon left">
+                    <img alt="menu" src="assets/menu32@64.png" width=24px height="24px">
+                </div>
+            </div>
+             <li><a href="home.html"><img src="images/home1.png"></a></li>
+        	</div>
+            <div class="snd_div_header">
+            <div class="sarch_div">
+            <form class="searchbox">
+        		<input type="search" placeholder="Search Products......" name="search_keyword" class="searchbox-input">       
+        		<a href="javascript:void(0);" class="searchbox-submit" ><img src="images/search.png"></a>       
+    		</form>
+            </div>
+            <div class="footer">
+            <ul class="footer_img">
+            <li class="account_sign"><a href="login.html"><img src="images/login1.png"></a></li>
+            <li class="account_signout"><a href="logout.html"><img src="images/logout1.png"></a></li>
+            <li><div class="main_btnbox"><div class="buttonbox" data-toggle="modal" data-target='#myModal'><button><img src="images/share1.png"></button></div></div></li>
+            </ul>
+            </div>
+            
+			<div class="headr_right">
+				<ul>                
+                	<li class="totalcart"><img src="images/cart1.png"><div class="cart_result"></div></li>
+				</ul>
+			</div>
+            </div>
+	</div>		
+      
+        <div id="main-sidebar" class="main-sidebar main-sidebar-left"></div>        
+</div>
+<div class="main_div">
+  <div class="container">
+    
+    <div id="jobs" class="signin_div form_submit">
+   <div class="top_div">
+        <ul>
+          <li class="active">Job Opportunities</li>
+        </ul>
+      </div>
+        <div class="content">
+        <div class="jobs_div frst">
+        <p>A. ADMINISTRATIVE ASSISTANT/SALES MANAGER</p>
+        <ul>
+        <li>Job Scope:</li>
+        <li>Assist project manager and director in handling multiple business client’s projects</li>
+        <li>Manage data and social media</li>
+        <li>Marketing and sales</li>
+        <li>Business & client handling</li>
+        </ul>
+        <ul>
+        <li>Terms:</li>
+        <li>Basic salary with performance-based commissions</li>
+        <li>Flexible working hours, no stress job, possible for business accounts & operational manager</li>
+        </ul>
+        <ul>
+        <li>Required Skills:</li>
+        <li> Fluent English, both oral & written</li>
+        <li> Understands WordPress and Woo Commerce</li>
+        <li>Has business sense and great communication skills</li>
+        <li>Able to do marketing and sales</li>
+        <li>Can handle admin & management, HR-related activities</li>
+        <li>Computer and internet savvy with understanding of website programs & designs, office programs & advancements,</li>
+        </ul>
+        <ul>
+        <li>Personal Qualities:</li>
+        <li>Indonesian Citizen, located in either Bali or Batam (preferred).</li>
+        <li>Accustomed to work online independently and efficiently, without supervision</li>
+        <li>Mature mentally and spiritually</li>
+        <li>Capable and dependable</li>
+        <li>Open & honest, supportive & trustworthy</li>
+        <li>Assertive with initiative</li>
+        <li>Smart, resourceful, insightful, kind, thoughtful and understanding</li>
+        <li> Flexible & easy to work with</li>
+        <li>Multi talented and multi skilled</li>
+        </ul>
+        </div>
+        <div class="prsnlinfo">
+        <form id="job_oppotunity">
+        <p>PERSONAL INFORMATION</p>
+          <ul>
+            <li>
+              <input type="text" name="candidate_name" id="candidate_name" placeholder="First, Last Name (required)">
+            </li>
+            <li>
+              <input type="text" name="customer_email" id="customer_email" placeholder="Your Email (required)">
+            </li>
+             <li>
+              <input type="text" name="customer_whatsapp" id="customer_whatsapp" maxlength="12" placeholder="WhatsApp Number">
+            </li>
+             <li>
+              <input type="text" name="customer_address" id="customer_address" placeholder="Address">
+            </li>
+             <li>
+              <input type="text" name="customer_region" id="customer_region" placeholder="Region">
+            </li>
+             <li>
+              <input type="text" name="customer_city" id="customer_city" placeholder="City">
+            </li>
+             <li>
+              <input type="text" name="customer_state" id="customer_state" placeholder="State">
+            </li>
+             <li>
+              <input type="text" name="customer_country" id="customer_country" placeholder="Country">
+            </li>
+              <li class="job_brows">Attach doc or pdf CV <div class="brwbtn"> <img src='images/brbtn.jpg' width="121" height="32" /><input type="file" name="customer_cv"></div></li>
+            <li class="join_team"><p>Tell us why should you join our team (500 words or less):</p>
+            <textarea name="customer_about_us" id="customer_about_us" placeholder="Describes about your self"></textarea></li>
+             
+            <li class="sbmt"><input type="button" name="job_cv_btton" id="job_cv_btton" value="submit"></li>
+          </ul>
+         </form>
+         </div>
+         <div class="loading" style="display:none;">
+            <div id="wait"><img src='images/demo_wait.gif' width="64" height="64" /><br>Please wait..</div>
+         </div>
+          
+        </div>
+      </div>
+      
+      
+      
+      
+      
+      
+    </div>
+    
+  </div>
+</div>
+
+
+
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">      
+            <div class="modal-body">
+                                <div class="innertext">									
+								
+								    <ul class="close_open_ul">
+                                            
+                                            <li><button type="button" class="btn btn-default" data-dismiss="modal"><img src="images/cancel.png"></button></li>
+                                            </ul>
+                                            <ul>
+                                              <li><a href="https://www.facebook.com/bluesailsco" target="_blank"><img src="images/pop_upfb.jpg"></a></li>
+                                              <li><a href="https://twitter.com/bluesailsco" target="_blank"><img src="images/pop_upg+.jpg"></a></li>
+                                              <li><a href="https://id.linkedin.com/in/bluesails" target="_blank"><img src="images/pop_upin.jpg"></a></li>
+                                              <li><a href="https://plus.google.com/103562994741176248240/posts" target="_blank"><img src="images/pop_uptw.jpg"></a></li>
+                                              <li><a href="https://www.youtube.com/channel/UCGNfkfSbjth8rE2k40pgXJw" target="_blank"><img src="images/pop_upyou_tube.jpg"></a></li>
+                                            </ul>
+                                </div>
+            </div>    
+    </div>
+  </div>
+</div>
+<script src="js/jquery.simpler-sidebar.min.js"></script>
+<script>
+	jQuery(document).ready(function() {
+		jQuery('#main-sidebar').simplerSidebar({
+		opener: '#toggle-sidebar',
+		top: 42,
+		animation: {
+			easing: "easeOutQuint"
+		},
+		sidebar: {
+			align: 'left',
+			closingLinks: '.close-sb'
+		}
+		});
+	});
+		
+	    function slideonlyone(thechosenone) {
+
+        var e = document.getElementById(thechosenone);
+              if (e.style.display == 'none') {
+
+                  
+				  e.style.display = 'block';
+				  // $(this).slideDown(200);
+
+              }
+
+              else {
+					e.style.display = 'none';
+                  // $(this).slideUp(600);
+
+              }
+			  
+
+         
+
+    }
+</script>
+</body>
+</html>

@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<title>bluesails</title>
+<link rel="stylesheet" href="style.css"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script>
+$(document).ready(function(){
+    $(".menu_box").click(function(){
+        $(".menusection").toggle();
+    });
+});
+</script>
+
+
+</head>
+<body>
+<div class="header">
+		<!--<div class="menu_box">
+		<a href="#"><img src="images/menu.png"/></a>
+		</div>-->
+			<div class="logo">
+			<a href="#"><img src="images/logo2.png"></a>
+			</div>
+            
+            <div id="main-navbar" class="main-navbar main-navbar-fixed-top">
+            <div class="main-navbar-content">
+                <div id="toggle-sidebar" class="icon left">
+                    <img alt="menu" src="assets/menu32@64.png" width=24px height="24px">
+                </div>
+            </div>
+        	</div>
+            <div class="sarch_div">
+            <input type="text" placeholder="search">
+            </div>
+            
+				<div class="headr_right header_home_icon">
+				<ul>
+				
+				
+      			<li><a href="home.html"><img src="images/home1.png"></a></li>
+                <li class="totalcart"><img src="images/cart1.png"><div class="cart_result"></div></li>
+				</ul>
+			</div>
+			
+			
+			
+			<div id="main-sidebar" class="main-sidebar main-sidebar-left">
+            <div id="main-sidebar-wrapper" class="main-sidebar-wrapper">
+                <nav>
+                    <ul>
+                       <li><a href="about.html"><p class="left_img"><img src="images/mm10.png"></p>
+                            <p class="right_text"><strong>About</strong></p></a>
+                            </li>
+                            <li><a href="category.html"><p class="left_img"><img src="images/mm3.png"></p>
+                            <p class="right_text"><strong>Product Category</strong></p></a>
+                            </li>
+                            <!--<li><a href="quote_form.html"><p class="left_img"><img src="images/mm4.png"></p>
+                            <p class="right_text"><strong>quote form</strong><br/>Fill the quote form</p></a>
+                            </li>-->
+                            <li><a href="#"><p class="left_img"><img src="images/mm5.png"></p>
+                            <p class="right_text"><strong>Order in progress</strong></p></a>
+                            </li>
+                            <li><a href="job.html"><p class="left_img"><img src="images/mm7.png"></p>
+                            <p class="right_text"><strong>Job</strong>
+                           </p></a> </li>
+                           <li><a href="expendition.html"><p class="left_img"><img src="images/travel.png"></p>
+                            <p class="right_text"><strong>Expeditions</strong>
+                           </p></a> </li>
+                            <li  class="cntct_li"><a href="contact.html"><p class="left_img"><img src="images/mm9.png"></p>
+                            <p class="right_text"><strong>Contact</strong></p></a>
+                            </li>
+                    </ul>
+                </nav>
+               
+                
+            </div>
+        </div>
+			
+		</div>
+
+<div class="main_div">
+	<div class="container">
+		
+			<div class="signin_div"><!----------------sign_in---------------->
+				
+				<div class="top_div">
+				<ul>
+					<li class="active">my Account</li>
+					
+				</ul>
+				</div>
+					<div class="content checkout_div account_detail">
+						<ul>
+						<p>Account Details</p>
+							<li><input type="text" name="usrname" placeholder="First Name"></li>
+						    <li><input type="text" name="usrname" placeholder="Last Name"></li>
+							<li><input type="text" name="usrname" placeholder="Email Address"></li>
+							<li><input type="text" name="usrname" placeholder="Current Password (leave blank to leave unchanged)"></li>
+							<li><input type="text" name="usrname" placeholder="New Password (leave blank to leave unchanged)"></li>
+							<li><input type="text" name="usrname" placeholder="Confirm New Password"></li>
+							
+						
+						
+						</ul>
+						
+						
+					</div>
+				
+
+					
+			</div>
+			<div class="submit_btn">
+			<button>save change</button>
+			</div>
+			
+			
+	
+				
+
+	</div>
+</div>
+
+<div class="footer">
+    <ul>
+        <li class="login"><a href="login.html">login</a></li>
+        <li class="logout"><a href="logout.html">logout</a></li>
+    </ul>
+    <ul class="footer_img">
+        <li><a href="#"><img src="images/share.png"></a></li>
+    </ul>
+</div>
+
+<!--------------------footer--------------------------->
+
+<div class="footer"><!--------------------footer--------------------------->
+
+<ul class="footer_img">
+<li class="login"><a href="login.html"><img src="images/login1.png"></a></li>
+<li><a href="#"><img src="images/share1.png"></a></li>
+</ul>
+</div>
+
+
+<script src="js/jquery.simpler-sidebar.min.js"></script>
+<script>
+	jQuery(document).ready(function() {
+		jQuery('#main-sidebar').simplerSidebar({
+		opener: '#toggle-sidebar',
+		top: 42,
+		animation: {
+			easing: "easeOutQuint"
+		},
+		sidebar: {
+			align: 'left',
+			closingLinks: '.close-sb'
+		}
+		});
+	});
+</script></body>	
+</html>

@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang = "en">
+<head>
+<meta charset = "utf-8">
+<title>Bluesails</title>
+<link href="tab.css" rel="stylesheet">
+<script src = "js/jquery.js" type="text/javascript"></script>
+<script type="text/javascript" src="./js/function.js"></script>
+<script type="text/javascript" src="js/vmenuModule.js"></script>
+<script src = "js/jquery-ui.js" type="text/javascript"></script>
+<link rel="stylesheet" href="style.css"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+<link rel="stylesheet" type="text/css" href="css/vmenuModule.css" />
+<link rel="stylesheet" href="css/bootstrap.min.css">
+<script src="js/bootstrap1.min.js"></script>
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+    if(window.XDomainRequest){contentType = "text/plain";}
+	jQuery.support.cors = true;
+	var siteurl = "http://www.bluesails.co";
+	
+jQuery.getJSON("http://jsonip.com/?callback=?", function (data) {
+        var uiid = unescape(data.ip);
+		var encodedString = btoa(uiid);			
+		var device_id = encodedString;
+	
+	var carturl = siteurl+'/api/cart.php'; 
+
+	if(localStorage.getItem('userInfo') == null){	   
+	    var uid = 0;		
+	}else{		
+		var uid = localStorage.getItem('userInfo');				
+	}
+	
+	// main nav
+	
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: siteurl + '/api/new_nav.php', 
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(menulist){				
+				jQuery("#main-sidebar").html(menulist['nav']);
+			
+		 }			
+  	});
+	
+	// end nav
+	
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: carturl, 		
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(res){
+			 	
+				var cart_data = "<div class='totalcart_result'>0</div>";
+				
+				if(parseInt(res['totalitems']) > 0)
+				{
+					cart_data = "<div class='totalcart_result'>"+res['totalitems']+"</div>" ;
+				}
+				jQuery(".cart_result").append(cart_data);
+			
+		 }			
+	});
+	
+	//Go to cart page
+	var carturl = siteurl+'/api/cart.php';
+	jQuery('.totalcart').live("click", function(){
+		jQuery.ajax({  
+			 type: 'GET',  
+			 url: carturl, 			
+			 dataType: 'json',
+			 data: {user_id:localStorage.getItem('userInfo'),device_id:device_id},    
+			 crossDomain: true,  
+			 success: function(pro){
+				
+				if(parseInt(pro['totalitems']) > 0)
+				{				
+										
+					window.location='cart.html?siteurl='+siteurl+'&uid='+uid+'&device_id='+device_id;					
+				}else{
+					alert("Cart is empty.");	
+				}
+			}
+			});
+		});		
+	});
+});
+</script>
+<style>
+#login {
+	font-size: 14px;
+}
+.ui-widget-header {
+	font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div class="header">
+		<div class="home_top_img">		
+			<div class="logo"><a href="home.html"><img src="images/logo2.png"></a></div>
+            <div class="snd_home_img"><img src="images/blue_sail4.png"></div>
+            </div>
+        <div class="header_snd_part">
+            <div id="main-navbar" class="main-navbar main-navbar-fixed-top">
+           
+            <div class="main-navbar-content">
+                <div id="toggle-sidebar" class="icon left">
+                    <img alt="menu" src="assets/menu32@64.png" width=24px height="24px">
+                </div>
+            </div>
+             <li><a href="home.html"><img src="images/home1.png"></a></li>
+        	</div>
+            <div class="snd_div_header">
+            <div class="sarch_div">
+            <form class="searchbox">
+        		<input type="search" placeholder="Search Products......" name="search_keyword" class="searchbox-input">       
+        		<a href="javascript:void(0);" class="searchbox-submit" ><img src="images/search.png"></a>       
+    		</form>
+            </div>
+            <div class="footer">
+            <ul class="footer_img">
+            <li class="account_sign"><a href="login.html"><img src="images/login1.png"></a></li>
+            <li class="account_signout"><a href="logout.html"><img src="images/logout1.png"></a></li>
+            <li><div class="main_btnbox"><div class="buttonbox" data-toggle="modal" data-target='#myModal'><button><img src="images/share1.png"></button></div></div></li>
+            </ul>
+            </div>
+            
+			<div class="headr_right">
+				<ul>                
+                	<li class="totalcart"><img src="images/cart1.png"><div class="cart_result"></div></li>
+				</ul>
+			</div>
+            </div>
+	</div>		
+      
+        <div id="main-sidebar" class="main-sidebar main-sidebar-left"></div>        
+</div>
+<div class="main_div">
+  <div class="container">
+    
+    <div class="signin_div form_submit">
+   	<div class="top_div">
+        <ul>
+          <li class="active">Welcome Sail</li>
+        </ul>
+      </div>
+      <div id="job_opp">
+        <div class="content">
+        <div class="jobs_div frst about_div">
+        <p>I sailed across the Pacific Ocean single-handed.  Three days out in the open sea, off San Francisco, I was hit by a Force 10 storm.  Two days, two nights, fighting with the elements until I decided to just let Mother Nature play with me.  Once the storm passed,  all my sails were torn.  It was then that I was reminded that you cannot compromise on your sails.
+
+That is why I want to provide the best quality sails for my fellow yachtsmen and sailors, able to withstand the elements.
+
+Bluesails are made of the finest quality materials to suit the needs of every sailor.  We listen to your needs and produce the sail most appropriate for you and your boat.  And we deliver to your doorstep.    Browse through our site and take a look at what we have and how we work.
+
+I know what sailors need.  I sail myself and love the freedom sailing gives me.  In 2010-2011, I made a life-changing voyage across the Pacific, from California to Bali.  I have written about my story in <a href="#"> “10 Ribu Mil Berlayar Menemui Ibunda”</a> and am glad that readers have found my story exciting and inspiring. Why don’t you read some of their reviews, albeit in Indonesian!
+
+Since returning to Indonesia, I have gone on other expeditions, each one different but all amazing and I want to share my experience with you.
+
+I  will continue to sail.  I plan to make other voyages, setting off from Indonesia – the world’s biggest archipelagic state —  or from anywhere else around the world.   There is so much out there in the blue yonder.   Perhaps you would like to go with me and together we can plan exhilarating  voyages?
+
+And if you like our Bluesails, why not join our team. The possibilities are endless.
+
+So, see you at the next port!
+
+ 
+
+Rob Rama Rambini</p>
+
+</div>
+<div class="founders">
+<p class="meet_fndr">Meet the founders</p>
+<div class="founder1">
+<img src="images/Rene225.jpg">
+<strong>Rene L Pattiradjawane</strong>
+<span>CTO</span>
+<p>In 1997, Rene is a shareholder of PT Agrakom with his friends and created Indonesia's biggest news portal (www.detik.com) which was later sold to CT Corps in 2011.
+
+After the tsunami hit Aceh in December 2004, he established "Air Putih" community with IT activists. Air Putih set up wireless technology networks connected to a satellite system with funding support from Intel Corp. This network enabled better communication and facilitated the distribution of aid in disaster struck areas in Aceh.
+
+In 2009 he became a shareholder in www.fotografer.net, a site for the photography community, which now has 1.3 mil registered users and 4 mil photos in stock.</p>
+</div>
+
+<div class="founder1">
+<img src="images/Me-225.jpg">
+<strong>Rob Rambini</strong>
+<span>Founder</span>
+<p>After sailing  single-handed across the Pacific from California-Bali in mid 2010 I've discovered that Indonesia, as the largest maritime country in the world has no sailing activities. Can you believe it!?
+
+That's how Bluesails was incepted. I want to change this by introducing our 'Buy One & Give One' program. What that means is if someone purchase our sail we would donate one to a local sailing club. Therefore, cruisers around the world can participate, support our boating industry and empowering the young generation to love and look after the ocean.
+
+Life's not all about me!</p>
+</div>
+
+<div class="founder1">
+<img src="images/Nat.jpg">
+<strong>Natalia Soebagjo</strong>
+<span>Co-Founder/Investor Relations</span>
+<p>Natalia has had extensive working experience in consultancy and in the Indonesian capital market, having owned and managed two securities firms and serving on various capital market related bodies, including a stint as chairperson of the Listings Committee of the Jakarta Stock Exchange. She is part of the PT Blue Sails Indonesia team to ensure that the company provides quality service to its discerning clientele.
+
+She is currently independent commissioner of PT AIG Indonesia, PT Hero Group and is also active in the Transparency International movement</p>
+</div>
+</div>          
+        </div>
+      </div>
+      
+      
+    </div>
+    
+  </div>
+</div>
+
+<div id="myModal" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+
+    <!-- Modal content-->
+    <div class="modal-content">
+      
+            <div class="modal-body">
+                                <div class="innertext">	
+								    <ul class="close_open_ul">                                            
+                                            <li><button type="button" class="btn btn-default" data-dismiss="modal"><img src="images/cancel.png"></button></li>
+                                            </ul>
+                                            <ul>                                           
+                                              <li><a href="https://www.facebook.com/bluesailsco" target="_blank"><img src="images/pop_upfb.jpg"></a></li>
+                                              <li><a href="https://plus.google.com/103562994741176248240/posts" target="_blank"><img src="images/pop_upg+.jpg"></a></li>
+                                              <li><a href="https://id.linkedin.com/in/bluesails" target="_blank"><img src="images/pop_upin.jpg"></a></li>
+                                              <li><a href="https://twitter.com/bluesailsco" target="_blank"><img src="images/pop_uptw.jpg"></a></li>
+                                              <li><a href="https://www.youtube.com/channel/UCGNfkfSbjth8rE2k40pgXJw" target="_blank"><img src="images/pop_upyou_tube.jpg"></a></li>
+                                            </ul>
+                                
+                                </div>
+            </div>    
+    </div>
+  </div>
+</div>
+<script src="js/jquery.simpler-sidebar.min.js"></script>
+<script>
+	jQuery(document).ready(function() {
+		jQuery('#main-sidebar').simplerSidebar({
+		opener: '#toggle-sidebar',
+		top: 42,
+		animation: {
+			easing: "easeOutQuint"
+		},
+		sidebar: {
+			align: 'left',
+			closingLinks: '.close-sb'
+		}
+		});
+	});
+</script>
+</body>
+</html>

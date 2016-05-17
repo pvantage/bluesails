@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<title>Bluesails</title>
+<link rel="stylesheet" href="style.css"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+<script type="text/javascript" src="js/jquery.js"></script>
+
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+
+
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script>
+function gup( name, url ) {
+  if (!url) url = location.href;
+  name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
+  var regexS = "[\\?&]"+name+"=([^&#]*)";
+  var regex = new RegExp( regexS );
+  var results = regex.exec( url );
+  return results == null ? null : results[1];
+}
+function GetURLParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++)
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam)
+		{
+            return sParameterName[1];
+        }
+    }
+}
+jQuery(document).ready(function(){
+
+if(localStorage.getItem('userInfo') == null){
+   //jQuery.mobile.changePage('login.html');
+   //alert(localStorage.getItem('userInfo'));
+   var uid = 0;
+   jQuery('.after_login').hide();
+	jQuery('.account_login').show();
+	jQuery('.login').show();
+	jQuery('.logout').hide();
+}
+else
+{
+	var uid = localStorage.getItem('userInfo');
+	jQuery('.after_login').show();
+	jQuery('.account_login').hide();
+	jQuery('.login').hide();
+	jQuery('.logout').show();
+	//alert(localStorage.getItem('userInfo'));
+}
+jQuery.getJSON("http://jsonip.com/?callback=?", function (data) {
+       
+        var uiid = unescape(data.ip);
+		var encodedString = btoa(uiid);
+		
+		
+		var device_id = encodedString;
+    
+	jQuery( document ).on( "mobileinit", function() {
+		jQuery.mobile.allowCrossDomainPages = true;
+	});
+	var contentType ="application/x-www-form-urlencoded; charset=utf-8";
+    if(window.XDomainRequest){contentType = "text/plain";}
+	jQuery.support.cors = true;
+	var siteurl=gup('siteurl', window.location.href);
+	var siteurl = "http://www.bluesails.co";
+	var uid = GetURLParameter('login_user_id');
+	//alert(uid);
+	if (uid === undefined)
+	{
+		var uid = 0 ;
+	}
+	
+	
+	
+	jQuery(document).ajaxStart(function(){
+		jQuery('.category_div').hide();
+		jQuery(".loading").css("display", "block");
+	});
+	jQuery(document).ajaxComplete(function(){
+		jQuery('.category_div').show();
+		jQuery(".loading").css("display", "none");
+	});
+	
+	//Show total cart
+	var carturl = siteurl+'/api/cart.php';
+	jQuery.ajax({  
+		 type: 'GET',  
+		 url: carturl,  
+		 //contentType: contentType,  
+		 dataType: 'json', 
+		 data: {user_id:uid,device_id:device_id}, 
+		 crossDomain: true,  
+		 success: function(res){
+			 jQuery(res['cartinfo']).each(function(index){
+				if(res['cartinfo'][index]['totalitems']>0)
+				{
+					var cart_data = "<div class='totalcart_result'>"+res['cartinfo'][index]['totalitems']+"</div>" ;
+				}
+				jQuery(".cart_result").append(cart_data);
+			});
+		 }			
+	});
+	
+	//Go to cart page
+	var carturl = siteurl+'/api/cart.php';
+	jQuery('.totalcart').click(function(){
+		jQuery.ajax({  
+			 type: 'GET',  
+			 url: carturl,  
+			 //contentType: contentType,  
+			 dataType: 'json',
+			 data: {user_id:uid,device_id:device_id},    
+			 crossDomain: true,  
+			 success: function(pro){
+				if(pro['cartinfo'])
+				{
+					window.location='cart.html?siteurl='+siteurl+'&uid='+uid+'&device_id='+device_id;
+					//alert('products.html?siteurl='+siteurl+'&cat_name='+cname+'&cid='+pro['category_id']);
+				}
+			}
+		});
+	}); 	
+	
+	
+	
+	var url = siteurl+'/api/category.php';
+	var uid = GetURLParameter('login_user_id');
+		
+		jQuery.ajax({  
+				 type: 'GET',  
+				 url: url,  
+				 //contentType: contentType,  
+				 dataType: 'json',  
+				 crossDomain: true,  
+				 success: function(res){
+				 jQuery(res['categories']).each(function(index){
+					//alert(res['categories'][index]['name']);
+					if((res['categories'][index]['thumb'])==null)
+					{
+						jQuery(".shop_result").append("<div class='category_main woocat' id="+res['categories'][index]['catid']+" name='"+res['categories'][index]['name']+"'><div class='product_inner'>"+'<img src='+"images/no_product.jpg"+' height='+150+' width='+150+'><br/>'+res['categories'][index]['name']+' ('+res['categories'][index]['count']+')'+"</div></div>");
+					}
+					else
+					{
+						jQuery(".shop_result").append("<div class='category_main woocat' id="+res['categories'][index]['catid']+" name='"+res['categories'][index]['name']+"'><div class='product_inner'>"+'<img src='+res['categories'][index]['thumb']+'><br/>'+res['categories'][index]['name']+' ('+res['categories'][index]['count']+')'+"</div></div>");
+					}
+				});
+					var producturl = siteurl+'/api/category.php';
+					jQuery('.woocat').click(function(){
+					 //alert('aa');
+							var cid = jQuery(this).attr("id");
+							var cname = jQuery(this).attr("name");
+							//alert(cname);
+							jQuery.ajax({  
+								 type: 'GET',  
+								 url: producturl,  
+								 //contentType: contentType,  
+								 dataType: 'json', 
+								 data: {cid:cid,uid:uid,device_id:device_id},  
+								 crossDomain: true,  
+								 success: function(pro){
+									if(pro['totalproducts']=='success')
+									{
+										//alert(uid);
+										window.location='products.html?siteurl='+siteurl+'&cname='+cname+'&cid='+pro['category_id']+'&uid='+uid+'&device_id='+device_id;
+										//alert('products.html?siteurl='+siteurl+'&cname='+cname+'&cid='+pro['category_id']+'&uid='+uid+'&device_id='+device_id);
+									}
+								}
+							});
+					}); 
+			 	}
+		});
+		
+		});
+	jQuery('.logout').click(function()
+	{
+		jQuery(".login").css("display", "block");
+		jQuery(".logout").css("display", "none");
+		var uid = '0' ;
+		window.location='category.html?siteurl='+siteurl+'&uid='+uid+'&device_id='+device_id;
+	});
+});
+</script>
+</head>
+<body>
+<div class="loading" style="display:none;">
+    <div id="wait"><img src='images/demo_wait.gif' width="64" height="64" /><br>Please wait..</div>
+</div>
+<div class="header">
+		<!--<div class="menu_box">
+		<a href="#"><img src="images/menu.png"/></a>
+		</div>-->
+			<div class="logo">
+			<a href="home.html"><img src="images/logo2.png"></a>
+			</div>
+            
+            <div id="main-navbar" class="main-navbar main-navbar-fixed-top">
+            <div class="main-navbar-content">
+                <div id="toggle-sidebar" class="icon left">
+                    <img alt="menu" src="assets/menu32@64.png" width=24px height="24px">
+                </div>
+            </div>
+        	</div>
+            <div class="sarch_div">
+            <input type="text" placeholder="search">
+            </div>
+            
+				<div class="headr_right header_home_icon">
+				<ul>
+				
+				
+      			<li><a href="home.html"><img src="images/home1.png"></a></li>
+                <li class="totalcart"><img src="images/cart1.png"><div class="cart_result"></div></li>
+				</ul>
+			</div>
+			
+			
+			
+			<div id="main-sidebar" class="main-sidebar main-sidebar-left">
+            <div id="main-sidebar-wrapper" class="main-sidebar-wrapper">
+                <nav>
+                    <ul>
+                       <li><a href="about.html"><p class="left_img"><img src="images/mm10.png"></p>
+                            <p class="right_text"><strong>About</strong></p></a>
+                            </li>
+                            <li><a href="category.html"><p class="left_img"><img src="images/mm3.png"></p>
+                            <p class="right_text"><strong>Product Category</strong></p></a>
+                            </li>
+                            <!--<li><a href="quote_form.html"><p class="left_img"><img src="images/mm4.png"></p>
+                            <p class="right_text"><strong>quote form</strong><br/>Fill the quote form</p></a>
+                            </li>-->
+                            <li><a href="#"><p class="left_img"><img src="images/mm5.png"></p>
+                            <p class="right_text"><strong>Order in progress</strong></p></a>
+                            </li>
+                            <li><a href="job.html"><p class="left_img"><img src="images/mm7.png"></p>
+                            <p class="right_text"><strong>Job</strong>
+                           </p></a> </li>
+                           <li><a href="expendition.html"><p class="left_img"><img src="images/travel.png"></p>
+                            <p class="right_text"><strong>Expeditions</strong>
+                           </p></a> </li>
+                            <li  class="cntct_li"><a href="contact.html"><p class="left_img"><img src="images/mm9.png"></p>
+                            <p class="right_text"><strong>Contact</strong></p></a>
+                            </li>
+                    </ul>
+                </nav>
+               
+                
+            </div>
+        </div>
+			
+		</div>
+
+<div class="main_div">
+	<div class="container">
+		
+			<div class="signin_div category_div"><!----------------sign_in---------------->
+				<div class="top_div">
+				<ul>
+					<li class="active"><a href="#">CATEGORY</a></li>
+				</ul>
+				</div>
+					<div class="content">
+						<div class="shop_result">
+                        
+						</div>
+                    </div>
+			</div>
+			
+				
+
+	</div>
+</div>
+
+
+<!--------------------footer--------------------------->
+
+<div class="footer">
+
+<ul class="footer_img">
+<li class="login"><a href="login.html"><img src="images/login1.png"></a></li>
+<li><a href="#"><img src="images/share1.png"></a></li>
+</ul>
+</div>
+
+
+<script src="js/jquery.simpler-sidebar.min.js"></script>
+<script>
+	jQuery(document).ready(function() {
+		jQuery('#main-sidebar').simplerSidebar({
+		opener: '#toggle-sidebar',
+		top: 42,
+		animation: {
+			easing: "easeOutQuint"
+		},
+		sidebar: {
+			align: 'left',
+			closingLinks: '.close-sb'
+		}
+		});
+	});
+</script>
+</body>	
+</html>

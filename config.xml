@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+    <widget xmlns   = "http://www.w3.org/ns/widgets"
+    xmlns:gap   = "http://phonegap.com/ns/1.0"
+    id          = "com.phonegap.example"
+    versionCode = "10" 
+    version     = "10.06.14" >
+
+    <!-- versionCode is optional and Android only -->
+
+    <name>BlueSails</name>
+
+    <description>
+      Bluesails was founded in Indonesia a few years after my single-handed voyage crossing the Pacific. Being close to nature, the freedom, sound of waves and countless starry nights are priceless.
+    </description>
+
+    <author href="http://www.vantagewebtech.com" email="priyanka.vantage123@gmail.com">
+      Priyanka Chhabra
+    </author>
+	
+	<icon gap:platform="webos" src="images/mobi_icon.jpg" />
+	<icon src="images/mobi_icon.jpg" gap:platform="android" gap:density="ldpi" />
+	<icon src="images/mobi_icon.jpg" gap:platform="android" gap:density="mdpi" />
+	<icon src="images/mobi_icon.jpg" gap:platform="android" gap:density="hdpi" />
+	<icon src="images/mobi_icon.jpg" gap:platform="android" gap:density="xhdpi" />
+	<icon src="images/mobi_icon.jpg" gap:platform="android" gap:density="xxhdpi" />
+	<icon src="images/mobi_icon.jpg" gap:platform="android" gap:density="ldpi" />
+	<icon src="images/mobi_icon.jpg" gap:platform="android" gap:density="mdpi" />
+	<icon src="images/mobi_icon.jpg" gap:platform="android" gap:density="hdpi" />
+	<icon src="images/mobi_icon.jpg" gap:platform="android" gap:density="xhdpi" />
+	<icon src="images/mobi_icon.jpg" gap:platform="android" gap:density="xxhdpi" />
+	<icon src="images/mobi_icon.jpg" gap:platform="winphone" />
+	<icon src="images/mobi_icon.jpg" gap:platform="winphone" gap:role="background" />
+	<gap:splash src="images/mobi_icon.jpg" gap:platform="ios" width="320" height="480" />
+	
+	  <access origin="*"/>    
+    <plugin name="cordova-plugin-whitelist" version="1" />
+    <allow-intent href="http://*/*" />
+    <allow-intent href="https://*/*" />
+    <allow-intent href="tel:*" />
+    <allow-intent href="sms:*" />
+    <allow-intent href="mailto:*" />
+    <allow-intent href="geo:*" />
+</widget>

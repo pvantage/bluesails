@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset = "utf-8">
+<title>Bluesails</title>
+<link href = "tab.css" rel = "stylesheet">
+<script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script type="text/javascript" src="js/validate.js"></script>
+<script type="text/javascript">
+jQuery(function() {
+	jQuery( "#login" ).tabs();
+});
+</script>
+
+
+
+<link rel="stylesheet" href="style.css"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+
+
+
+
+<script type="text/javascript">
+jQuery(document).ready(function(){
+	
+
+	
+    jQuery(".menu_box").click(function(){
+        jQuery(".menusection").toggle();
+    });
+
+if(localStorage.getItem('userInfo') == null){
+   //jQuery.mobile.changePage('login.html');
+   //alert(localStorage.getItem('userInfo'));
+   var uid = 0;
+   jQuery('.after_login').hide();
+	jQuery('.account_login').show();
+	jQuery('.login').show();
+	jQuery('.logout').hide();
+}
+else
+{
+	var uid = localStorage.getItem('userInfo');
+	jQuery('.after_login').show();
+	jQuery('.account_login').hide();
+	jQuery('.login').hide();
+	jQuery('.logout').show();
+	//alert(localStorage.getItem('userInfo'));
+}
+var submitIcon = jQuery('.searchbox-icon');
+            var inputBox = jQuery('.searchbox-input');
+            var searchBox = jQuery('.searchbox');
+            var isOpen = false;
+            submitIcon.click(function(){
+                if(isOpen == false){
+                    searchBox.addClass('searchbox-open');
+                    inputBox.focus();
+                    isOpen = true;
+                } else {
+                    searchBox.removeClass('searchbox-open');
+                    inputBox.focusout();
+                    isOpen = false;
+                }
+            });  
+             submitIcon.mouseup(function(){
+                    return false;
+                });
+            searchBox.mouseup(function(){
+                    return false;
+                });
+            jQuery(document).mouseup(function(){
+                    if(isOpen == true){
+                        jQuery('.searchbox-icon').css('display','block');
+                        submitIcon.click();
+                    }
+                });
+});
+function buttonUp(){
+                var inputVal = jQuery('.searchbox-input').val();
+                inputVal = jQuery.trim(inputVal).length;
+                if( inputVal !== 0){
+                    jQuery('.searchbox-icon').css('display','none');
+                } else {
+                    jQuery('.searchbox-input').val('');
+                    jQuery('.searchbox-icon').css('display','block');
+                }
+            }
+
+</script>
+<style>
+#login {
+	font-size: 14px;
+}
+.ui-widget-header {
+	font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div class="header">
+		<!--<div class="menu_box">
+		<a href="#"><img src="images/menu.png"/></a>
+		</div>-->
+			<div class="logo">
+			<a href="#"><img src="images/logo2.png"></a>
+			</div>
+            
+            <div id="main-navbar" class="main-navbar main-navbar-fixed-top">
+            <div class="main-navbar-content">
+                <div id="toggle-sidebar" class="icon left">
+                    <img alt="menu" src="assets/menu32@64.png" width=24px height="24px">
+                </div>
+            </div>
+        	</div>
+            <div class="sarch_div">
+            <input type="text" placeholder="search">
+            <button></button>
+            </div>
+            
+				<div class="headr_right header_home_icon">
+				<ul>
+				
+				
+      			<li><a href="home.html"><img src="images/home1.png"></a></li>
+                <li class="totalcart"><img src="images/cart1.png"><div class="cart_result"></div></li>
+				</ul>
+			</div>
+			
+			
+			
+			<div id="main-sidebar" class="main-sidebar main-sidebar-left">
+            <div id="main-sidebar-wrapper" class="main-sidebar-wrapper">
+                <nav>
+                    <ul>
+                       <li><a href="about.html"><p class="left_img"><img src="images/mm10.png"></p>
+                            <p class="right_text"><strong>About</strong></p></a>
+                            </li>
+                            <li><a href="category.html"><p class="left_img"><img src="images/mm3.png"></p>
+                            <p class="right_text"><strong>Product Category</strong></p></a>
+                            </li>
+                            <!--<li><a href="quote_form.html"><p class="left_img"><img src="images/mm4.png"></p>
+                            <p class="right_text"><strong>quote form</strong><br/>Fill the quote form</p></a>
+                            </li>-->
+                            <li><a href="#"><p class="left_img"><img src="images/mm5.png"></p>
+                            <p class="right_text"><strong>Order in progress</strong></p></a>
+                            </li>
+                            <li><a href="job.html"><p class="left_img"><img src="images/mm7.png"></p>
+                            <p class="right_text"><strong>Job</strong>
+                           </p></a> </li>
+                           <li><a href="expendition.html"><p class="left_img"><img src="images/travel.png"></p>
+                            <p class="right_text"><strong>Expeditions</strong>
+                           </p></a> </li>
+                            <li  class="cntct_li"><a href="contact.html"><p class="left_img"><img src="images/mm9.png"></p>
+                            <p class="right_text"><strong>Contact</strong></p></a>
+                            </li>
+                    </ul>
+                </nav>
+               
+                
+            </div>
+        </div>
+			
+		</div>
+
+<div class="main_div">
+	<div class="container">
+		
+			<div class="signin_div category_div"><!----------------sign_in---------------->
+				<div class="top_div">
+				<ul>
+					<li class="active"><a href="#"><img class="left_arrow" src="images/left_arrow.png">Beneteau Yachts</a></li>
+					
+				</ul>
+				</div>
+			
+					<div class="content product_div">
+						<div class="big_img_div">
+							<img src="images/product_detail1.png">
+							<p>Beneteau Yachts</p><p>$ 120.00</p>
+						</div>
+							<div class="descrption product_detail2">
+							<h3>descrption</h3>
+							<p>All sails are made to order from our factory in Southern 
+							China. We have hand-crafted over than 8000+ sails since
+							1991. We stand behind our products  and provide a  
+							1-year warranty  against faulty workmanship – subject to
+							proper maintenance and being used in appropriate wind 
+							conditions. Production and shipping takes about 4 weeks 
+							(3 weeks production, 3-7 days shipping worldwide via 
+							Fedex, DHL or UPS).</p>
+							</div>
+								<div class="selct_product_div"><!----------------------select-category-div---------------------------->
+									<div class="frst_div">
+									<p>Model</p>
+									<p class="select-option">
+									<select>
+									  <option value="category">Choose an option</option>
+									  <option value="category">Oceanis 45</option>
+									  <option value="category">Sense 55</option>
+									  
+									</select></p></div>
+										<div class="frst_div">
+									<p>Sailing Type</p>
+									<p class="select-option">
+									<select>
+									  <option value="category">Choose an option</option>
+									  <option value="category">Training/Cruising</option>
+									  <option value="category">Racer/Cruiser</option>
+									 
+									  
+									</select></p></div>
+										<div class="frst_div">
+									<p>Sail Type</p>
+									<p class="select-option">
+									<select>
+									  <option value="category">Choose an option</option>
+									  <option value="category">Headsail</option>
+									  <option value="category">Mainsail</option>
+									 
+									  
+									</select></p></div>
+								</div>
+                                <div class="add_cart">
+                                <div class="product_quantity">
+                                <strong>12</strong>
+                                </div>
+								<div class="edit_cart">
+                                <a href="#">add to cart</a>
+                                 </div>
+                                </div>
+                                
+                                
+                                
+                                <!----------------------------------------------product_description-------------------------------------------->
+
+							<div id="login" class="signin_div form_submit new_product_desct">  
+  
+      <ul>
+        <li data-id="1"><a href = "#signin">Description</a></li>
+        <li><span class="ui-tabs-anchor">/</span></li>
+        <li data-id="2"><a href = "#signup">Reviews</a></li>
+      </ul>
+      <div id = "signin">
+        <div class="content">
+        <h4>Product Description</h4>
+        <h5>History</h5>
+        	<p>The company is a large and recognized boat builder, commanding a substantial worldwide market share for sailing yachts, predominately in the United States, France and the United Kingdom. It has five factories in the Vendée department of France and one US plant in Marion, South Carolina. The Beneteau USA plant opened in 1986; since then the factory has nearly doubled in size to about 250,000 square feet (23,000 m2), with roughly $25 million of total capital invested in the US. This is considered to be an advanced marine factory; it is newer than most of its competitor’s factories.
+
+Note in the models below that the First Series is much faster than the Beneteau Series (lower PHRF means a faster boat), the latter series have similar performance ratings to similarly-sized Catalina models. Bénéteau vessels have won numerous prizes, among other European Yacht of the Year 2002, 2007 and 2009.</p>
+         
+          <div class="loading" style="display:none;">
+            <div id="wait"><img src='images/demo_wait.gif' width="64" height="64" /><br>Please wait..</div>
+         </div>
+        </div>
+      </div>
+      <div id = "signup">
+        <div class="content">
+        <h5>Review</h5>
+        <p>There are no reviews yet.
+          Only logged in customers who have purchased this product may leave a review.</p>
+          
+          <div class="loading" style="display:none;">
+            <div id="wait"><img src='images/demo_wait.gif' width="64" height="64" /><br>Please wait..</div>
+         </div>
+        </div>
+      </div>
+    </div> 
+    
+    
+    <div class="related_products">
+    
+    
+	<h3>Related Products</h3>
+    
+    
+    <div class="product_main  class_od"><div id="3159" class="product_inner woo_pro_details"><img width="150" height="150" src="http://www.bluesails.co/wp-content/uploads/2015/01/2015-02-18-08.22.400.jpg"><p class="pro_name">Beneteau Yachts<strong>$45</strong></p>
+    </div>
+    
+    <div class="edit_cart related"><a href="#">add to cart</a> </div>
+    </div>
+    
+    
+    
+    </div>
+    
+    
+    
+                                   
+					
+                    
+                    
+                    </div>
+			</div>
+		
+
+
+	</div>
+</div>
+				<!--------------------footer--------------------------->
+
+<div class="footer"><!--------------------footer--------------------------->
+
+<ul class="footer_img">
+<li class="login"><a href="login.html"><img src="images/login1.png"></a></li>
+<li><a href="#"><img src="images/share1.png"></a></li>
+</ul>
+</div>
+
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+<script src="js/jquery.simpler-sidebar.min.js"></script>
+<script>
+	jQuery(document).ready(function() {
+		jQuery('#main-sidebar').simplerSidebar({
+		opener: '#toggle-sidebar',
+		top: 42,
+		animation: {
+			easing: "easeOutQuint"
+		},
+		sidebar: {
+			align: 'left',
+			closingLinks: '.close-sb'
+		}
+		});
+	});
+</script>
+</body>
+</html>
+ 

@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang = "en">
+<head>
+<meta charset = "utf-8">
+<title>Bluesails</title>
+<link href = "tab.css" rel = "stylesheet">
+<script src = "js/jquery-1.10.2.js" type="text/javascript"></script>
+<script src = "js/jquery-ui.js" type="text/javascript"></script>
+<script type="text/javascript" src="js/validate.js"></script>
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+<link rel="stylesheet" href="style.css"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+
+
+<script>
+jQuery(document).ready(function(){
+    jQuery(".menu_box").click(function(){
+        jQuery(".menusection").toggle();
+    });
+if(localStorage.getItem('userInfo') == null){
+   //jQuery.mobile.changePage('login.html');
+   //alert(localStorage.getItem('userInfo'));
+   var uid = 0;
+   jQuery('.after_login').hide();
+	jQuery('.account_login').show();
+	jQuery('.login').show();
+	jQuery('.logout').hide();
+}
+else
+{
+	var uid = localStorage.getItem('userInfo');
+	jQuery('.after_login').show();
+	jQuery('.account_login').hide();
+	jQuery('.login').hide();
+	jQuery('.logout').show();
+	//alert(localStorage.getItem('userInfo'));
+}
+});
+</script>
+<style>
+#login {
+	font-size: 14px;
+}
+.ui-widget-header {
+	font-weight: bold;
+}
+</style>
+</head>
+<body>
+<div class="header">
+		<!--<div class="menu_box">
+		<a href="#"><img src="images/menu.png"/></a>
+		</div>-->
+			<div class="logo">
+			<a href="home.html"><img src="images/logo2.png"></a>
+			</div>
+            
+            <div id="main-navbar" class="main-navbar main-navbar-fixed-top">
+            <div class="main-navbar-content">
+                <div id="toggle-sidebar" class="icon left">
+                    <img alt="menu" src="assets/menu32@64.png" width=24px height="24px">
+                </div>
+            </div>
+        	</div>
+            <div class="sarch_div">
+            <input type="text" placeholder="search">
+            </div>
+            
+				<div class="headr_right header_home_icon">
+				<ul>
+				
+				
+      			<li><a href="home.html"><img src="images/home1.png"></a></li>
+                <li class="totalcart"><img src="images/cart1.png"><div class="cart_result"></div></li>
+				</ul>
+			</div>
+			
+			
+			
+			<div id="main-sidebar" class="main-sidebar main-sidebar-left">
+            <div id="main-sidebar-wrapper" class="main-sidebar-wrapper">
+                <nav>
+                    <ul>
+                       <li><a href="about.html"><p class="left_img"><img src="images/mm10.png"></p>
+                            <p class="right_text"><strong>About</strong></p></a>
+                            </li>
+                            <li><a href="category.html"><p class="left_img"><img src="images/mm3.png"></p>
+                            <p class="right_text"><strong>Product Category</strong></p></a>
+                            </li>
+                            <!--<li><a href="quote_form.html"><p class="left_img"><img src="images/mm4.png"></p>
+                            <p class="right_text"><strong>quote form</strong><br/>Fill the quote form</p></a>
+                            </li>-->
+                            <li><a href="#"><p class="left_img"><img src="images/mm5.png"></p>
+                            <p class="right_text"><strong>Order in progress</strong></p></a>
+                            </li>
+                            <li><a href="job.html"><p class="left_img"><img src="images/mm7.png"></p>
+                            <p class="right_text"><strong>Job</strong>
+                           </p></a> </li>
+                           <li><a href="expendition.html"><p class="left_img"><img src="images/travel.png"></p>
+                            <p class="right_text"><strong>Expeditions</strong>
+                           </p></a> </li>
+                            <li  class="cntct_li"><a href="contact.html"><p class="left_img"><img src="images/mm9.png"></p>
+                            <p class="right_text"><strong>Contact</strong></p></a>
+                            </li>
+                    </ul>
+                </nav>
+               
+                
+            </div>
+        </div>
+			
+		</div>
+<div class="main_div">
+  <div class="container">
+  
+    
+    <div class="signin_div form_submit">
+   	<div class="top_div">
+        <ul>
+          <li class="active"><a href="#">payment</a></li>
+        </ul>
+      </div>
+      <div id="job_opp">
+        <div class="content">
+        <div class="jobs_div frst about_div">
+        <div class="text_content">
+				<div class="direct_transfer">
+						<p>Direct Bank Transfer </p>
+						<div class="payment_txt">
+						<p>Make your payment directly into our bank 
+							account. Please use your Order ID as the
+							payment reference. Your order won’t be 
+							shipped or processed until the funds have 
+							cleared in our account</p></div>
+					</div></div>
+        
+
+</div>
+
+        
+        
+        
+        
+        
+        
+         <div class="loading" style="display:none;">
+            <div id="wait"><img src='images/demo_wait.gif' width="64" height="64" /><br>Please wait..</div>
+         </div>
+          
+        </div>
+      </div>
+      
+      
+    </div>
+    
+  </div>
+</div>
+
+
+
+<!--------------------footer--------------------------->
+
+<div class="footer">
+
+<ul class="footer_img">
+<li class="login"><a href="login.html"><img src="images/login1.png"></a></li>
+<li><a href="#"><img src="images/share1.png"></a></li>
+</ul>
+</div>
+
+
+<script src="js/jquery.simpler-sidebar.min.js"></script>
+<script>
+	jQuery(document).ready(function() {
+		jQuery('#main-sidebar').simplerSidebar({
+		opener: '#toggle-sidebar',
+		top: 42,
+		animation: {
+			easing: "easeOutQuint"
+		},
+		sidebar: {
+			align: 'left',
+			closingLinks: '.close-sb'
+		}
+		});
+	});
+</script>
+</body>
+</html>

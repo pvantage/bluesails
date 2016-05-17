@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+<title>bluesails</title>
+<link rel="stylesheet" href="style.css"/>
+<link href='https://fonts.googleapis.com/css?family=Open+Sans:400,300,300italic,400italic,600,600italic,700,700italic,800,800italic' rel='stylesheet' type='text/css'>
+<link rel="stylesheet" type="text/css" href="assets/style.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.0/jquery.min.js"></script>
+<script type="text/javascript" src="js/jquery-ui.js"></script>
+<script>
+$(document).ready(function(){
+    $(".menu_box").click(function(){
+        $(".menusection").toggle();
+    });
+
+
+if(localStorage.getItem('userInfo') == null){
+   //jQuery.mobile.changePage('login.html');
+   //alert(localStorage.getItem('userInfo'));
+   var uid = 0;
+   jQuery('.after_login').hide();
+	jQuery('.account_login').show();
+	jQuery('.login').show();
+	jQuery('.logout').hide();
+}
+else
+{
+	var uid = localStorage.getItem('userInfo');
+	jQuery('.after_login').show();
+	jQuery('.account_login').hide();
+	jQuery('.login').hide();
+	jQuery('.logout').show();
+	//alert(localStorage.getItem('userInfo'));
+}	
+});
+</script>
+
+
+</head>
+<body>
+
+<div class="header">
+		<!--<div class="menu_box">
+		<a href="#"><img src="images/menu.png"/></a>
+		</div>-->
+			<div class="logo">
+			<a href="home.html"><img src="images/logo2.png"></a>
+			</div>
+            
+            <div id="main-navbar" class="main-navbar main-navbar-fixed-top">
+            <div class="main-navbar-content">
+                <div id="toggle-sidebar" class="icon left">
+                    <img alt="menu" src="assets/menu32@64.png" width=24px height="24px">
+                </div>
+            </div>
+        	</div>
+            <div class="sarch_div">
+            <input type="text" placeholder="search">
+            </div>
+            
+				<div class="headr_right header_home_icon">
+				<ul>
+				
+				
+      			<li><a href="home.html"><img src="images/home1.png"></a></li>
+                <li class="totalcart"><img src="images/cart1.png"><div class="cart_result"></div></li>
+				</ul>
+			</div>
+			
+			
+			
+			<div id="main-sidebar" class="main-sidebar main-sidebar-left">
+            <div id="main-sidebar-wrapper" class="main-sidebar-wrapper">
+                <nav>
+                    <ul>
+                       <li><a href="about.html"><p class="left_img"><img src="images/mm10.png"></p>
+                            <p class="right_text"><strong>About</strong></p></a>
+                            </li>
+                            <li><a href="category.html"><p class="left_img"><img src="images/mm3.png"></p>
+                            <p class="right_text"><strong>Product Category</strong></p></a>
+                            </li>
+                            <!--<li><a href="quote_form.html"><p class="left_img"><img src="images/mm4.png"></p>
+                            <p class="right_text"><strong>quote form</strong><br/>Fill the quote form</p></a>
+                            </li>-->
+                            <li><a href="#"><p class="left_img"><img src="images/mm5.png"></p>
+                            <p class="right_text"><strong>Order in progress</strong></p></a>
+                            </li>
+                            <li><a href="job.html"><p class="left_img"><img src="images/mm7.png"></p>
+                            <p class="right_text"><strong>Job</strong>
+                           </p></a> </li>
+                           <li><a href="expendition.html"><p class="left_img"><img src="images/travel.png"></p>
+                            <p class="right_text"><strong>Expeditions</strong>
+                           </p></a> </li>
+                            <li  class="cntct_li"><a href="contact.html"><p class="left_img"><img src="images/mm9.png"></p>
+                            <p class="right_text"><strong>Contact</strong></p></a>
+                            </li>
+                    </ul>
+                </nav>
+               
+                
+            </div>
+        </div>
+			
+		</div>
+<div class="main_div">
+	<div class="container">
+		
+
+				<div class="signin_div"><!----------------community-content---------------->
+				
+				<div class="top_div">
+				<ul>
+					 
+					<li class="active"><a href="#">Community</a></li>
+				</ul>
+				</div>
+					<div class="content community_content">
+					
+					<div class="tr-blogfw">
+						<div class="td-blogfw">
+							<div class="data_type">
+									    		
+							<div class="cutcorner_top"></div>
+												    		
+							<div class="data">
+							<div class="day">17</div>
+							<div>Sep</div>
+							</div>
+												    	
+							<div class="post_type text" style="background-color: rgb(54, 145, 173);"></div>												    		
+							<div class="cutcorner_bottom"></div>
+				
+							</div>
+							</div>
+							<div class="thepostcont">
+
+							<div class="metas_container">
+													
+							<div class="the_title"><h2><a href="#" style="color: rgb(68, 68, 68);">Medana Bay Marina in North Lombok</a></h2></div>
+										    				
+							</div>
+							<!-------------------------------------big_img---------------------------------------------->
+
+							<div class="community_big_img">
+								<li><a href="images/community1.jpg" class="flipLightBox">
+								<img src="images/community1.jpg" width="225" height="225" alt="Image 1" />
+								<span><b>LightBox</b> Text to accompany first lightbox image</span>
+								</a></li>
+
+								<li><a href="images/community1.jpg" class="flipLightBox">
+								<img src="images/community1.jpg" width="225" height="225" alt="Image 2" />
+								<span><b>LightBox Image 2</b><br />Text to accompany 2nd lightbox image</span>
+								</a></li>
+
+								<li><a href="images/community1.jpg" class="flipLightBox">
+								<img src="images/community1.jpg" width="225" height="225" alt="Image 3" />
+								<span><b>LightBox Three</b> Text to accompany the third lightbox image</span>
+								</a></li>
+
+								<li><a href="images/community1.jpg" class="flipLightBox">
+								<img src="images/community1.jpg" width="225" height="225" alt="Image 4" />
+								<span><b>The Final LightBox</b> Text to accompany the last of the lighboxes</span>
+								</a></li>
+							</div>
+
+
+
+
+
+
+					    	
+							
+													    
+							<div class="metas">
+													    	
+							<div class="metas-div">
+							<div class="divider-tags">
+							<span class="blog-i comments">0 No comments</span>
+							</div>
+																
+							<div class="divider-tags">
+							<a href="?author=1" class="the_author" style="color: rgb(178, 183, 189);">nsoebagjo@gmail.com</a>
+							</div>
+							<div class="divider-tags">
+							<span class="tags"><a rel="tag" href="#">East Indonesia</a>, <a rel="tag" href="#">indonesia</a>, <a rel="tag" href="#">sailing</a></span>
+							</div>
+							<div class="divider-tags">
+							<span class="categories wrote_span"><a rel="category tag" href="#" style="color: rgb(178, 183, 189);">Destination</a>, <a rel="category tag" href="#">Journal</a>, <a rel="category tag" href="#" style="color: rgb(178, 183, 189);">Photos</a></span>
+							</div>
+							</div>
+							</div>
+														    
+						</div>
+					</div>
+					
+					
+					</div>
+					<div class="comunity_form">
+					<h2>Leave a Reply </h2>
+					<p>Your email address will not be published. Required fields are marked *</p>
+					<form>
+					<ul>
+					<li><label>Comment</label><textarea name="comment" form="usrform">Enter text here...</textarea></li>
+					<li><label>Name*</label><input type="text" name="usrname"></li>
+					<li><label>Email* </label><input type="text" name="usrname"></li>
+					<li><label>Website</label><input type="text" name="usrname"></li>
+					</ul>
+					<div class="comnt_btn"><button>post your comment</button></div>
+					</form>
+					</div>
+					
+					
+					
+					
+				
+					
+					
+			</div>
+			
+			
+			
+				
+
+	</div>
+</div>
+
+
+<!--------------------footer--------------------------->
+
+<div class="footer">
+
+<ul class="footer_img">
+<li class="login"><a href="login.html"><img src="images/login1.png"></a></li>
+<li><a href="#"><img src="images/share1.png"></a></li>
+</ul>
+</div>
+
+
+<script src="js/jquery.simpler-sidebar.min.js"></script>
+<script>
+	jQuery(document).ready(function() {
+		jQuery('#main-sidebar').simplerSidebar({
+		opener: '#toggle-sidebar',
+		top: 42,
+		animation: {
+			easing: "easeOutQuint"
+		},
+		sidebar: {
+			align: 'left',
+			closingLinks: '.close-sb'
+		}
+		});
+	});
+</script>
+
+
+</body>
+</html>
