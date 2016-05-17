@@ -232,8 +232,10 @@ function fblogin(){
         myWindow=null; //delete the object
 
     }else{            
-            myWindow = window.open('https://www.facebook.com/dialog/oauth?redirect_uri='+URLAfterAuth+'&display=popup&response_type=code&client_id='+appId+'&ret=login', 'mywindow','left=100,top=50,width=500,height=500,toolbar=0,resizable=0');                       
-
+            //myWindow = window.open('https://www.facebook.com/dialog/oauth?redirect_uri='+URLAfterAuth+'&display=popup&response_type=code&client_id='+appId+'&ret=login', 'mywindow','left=100,top=50,width=500,height=500,toolbar=0,resizable=0');   
+			var iframe = document.getElementById('fbloginurl');
+			iframe.src = 'https://www.facebook.com/dialog/oauth?redirect_uri='+URLAfterAuth+'&display=popup&response_type=code&client_id='+appId+'&ret=login';                    
+		jQuery("#fblogin").modal('show');
     }
 
 }
@@ -351,6 +353,16 @@ function fblogin(){
   </div>
 </div>
 
+<div id="fblogin" class="modal fade" role="dialog">
+  <div class="modal-dialog">
+    <div class="modal-content">      
+		<div class="modal-body">
+			<button type="button" class="btn btn-default" data-dismiss="modal"><img src="images/cancel.png"></button>
+			<iframe id="fbloginurl" src="#"></iframe>
+		</div>    
+    </div>
+  </div>
+</div>
 
 <div id="myModal" class="modal fade" role="dialog">
   <div class="modal-dialog">
