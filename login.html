@@ -247,13 +247,15 @@ function init() {
 }
 function startfblogin()
 {
-	facebookConnectPlugin.login(["public_profile"],
+	facebookConnectPlugin.login(["public_profile", "user_birthday"],
 		fbLoginSuccess,
 		function (error) { alert("" + error) }
 	);
 }
 var fbLoginSuccess = function (userData) {
     var udata=JSON.stringify(userData);
+	alert(udata);
+	alert(udata.userID);
     facebookConnectPlugin.api(udata.userID+"/?fields=id,email,first_name,last_name,address", ["user_birthday"],
     function (result) {
         alert("Result: " + JSON.stringify(result));
