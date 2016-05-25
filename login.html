@@ -223,9 +223,9 @@ jQuery.getJSON("http://jsonip.com/?callback=?", function (data) {
 });
 
 var myWindow=null;
-function fblogin(){
-    var appId =396797113702689;/** facebook application id */
-    var URLAfterAuth = 'http://www.bluesails.co/api/fb.html';/* After authentication go to this page **/
+/*function fblogin(){
+    var appId =396797113702689;
+    var URLAfterAuth = 'http://www.bluesails.co/api/fb.html';
     var str= window.location.href;
     if (myWindow && !myWindow.closed) { //exist and is not closed
         myWindow.close();
@@ -236,7 +236,87 @@ function fblogin(){
 
     }
 
+}*/
+function fblogin() {
+	document.querySelector("#startfblogin").addEventListener("touchend", startfblogin, false);
+	//resultDiv = document.querySelector("#results");
 }
+function startfblogin()
+{
+	facebookConnectPlugin.login(["public_profile"],
+		fbLoginSuccess,
+		function (error) { alert("" + error) }
+	);
+}
+var fbLoginSuccess = function (userData) {
+    alert("UserInfo: " + JSON.stringify(userData));
+    facebookConnectPlugin.getLoginStatus(
+        function (status) {
+            alert("current status: " + JSON.stringify(status));
+
+            var options = { method:"feed" };
+            facebookConnectPlugin.showDialog(options,
+                function (result) {
+                    alert("Posted. " + JSON.stringify(result));             },
+            function (e) {
+                alert("Failed: " + e);
+            });
+        }
+    );
+};
+app.initialize();
+  function login() {
+    window.plugins.googleplus.login(
+        {
+          'iOSApiKey': '6535513912-uvpf249ak7avodois85tkjmh2lc2j952.apps.googleusercontent.com'
+        },
+        function (obj) {
+          document.querySelector("#image").src = obj.imageUrl;
+          document.querySelector("#image").style.visibility = 'visible';
+          document.querySelector("#feedback").innerHTML = "Hi, " + obj.displayName + ", " + obj.email;
+        },
+        function (msg) {
+          document.querySelector("#feedback").innerHTML = "error: " + msg;
+        }
+    );
+  }
+  function trySilentLogin() {
+    window.plugins.googleplus.trySilentLogin(
+        {
+          'iOSApiKey': '6535513912-uvpf249ak7avodois85tkjmh2lc2j952.apps.googleusercontent.com'
+        },
+        function (obj) {
+          document.querySelector("#image").src = obj.imageUrl;
+          document.querySelector("#image").style.visibility = 'visible';
+          document.querySelector("#feedback").innerHTML = "Silent hi, " + obj.displayName + ", " + obj.email;
+        },
+        function (msg) {
+          document.querySelector("#feedback").innerHTML = "error: " + msg;
+        }
+    );
+  }
+  function logout() {
+    window.plugins.googleplus.logout(
+        function (msg) {
+          document.querySelector("#image").style.visibility = 'hidden';
+          document.querySelector("#feedback").innerHTML = msg;
+        }
+    );
+  }
+  function disconnect() {
+    window.plugins.googleplus.disconnect(
+        function (msg) {
+          document.querySelector("#image").style.visibility = 'hidden';
+          document.querySelector("#feedback").innerHTML = msg;
+        }
+    );
+  }
+  window.onerror = function(what, line, file) {
+    alert(what + '; ' + line + '; ' + file);
+  };
+  function handleOpenURL (url) {
+    document.querySelector("#feedback").innerHTML = "App was opened by URL: " + url;
+  }
 </script>
 <style>
 #login {
@@ -314,6 +394,7 @@ function fblogin(){
          <div class="social_div">
             
 			<ul>
+			  <li class="signinwithfb"><a href="javascript:fblogin();">Facebook Login</a> </li>
               <li class="forgotbox"><a href="forgot_password.html">Forgot your password ?</a> </li>             
             </ul>
           </div>
