@@ -253,74 +253,22 @@ function startfblogin()
 	);
 }
 var fbLoginSuccess = function (userData) {
-    alert("UserInfo: " + JSON.stringify(userData));
-    facebookConnectPlugin.getLoginStatus(
-        function (status) {
-            alert("current status: " + JSON.stringify(status));
-
-            var options = { method:"feed" };
-            facebookConnectPlugin.showDialog(options,
-                function (result) {
-                    alert("Posted. " + JSON.stringify(result));             },
-            function (e) {
-                alert("Failed: " + e);
-            });
-        }
-    );
+    var udata=JSON.stringify(userData);
+    facebookConnectPlugin.api(udata.userID+"/?fields=id,email,first_name,last_name,address", ["user_birthday"],
+    function (result) {
+        alert("Result: " + JSON.stringify(result));
+        /* alerts:
+            {
+                "id": "000000123456789",
+                "email": "myemail@example.com"
+            }
+        */
+    },
+    function (error) {
+        alert("Failed: " + error);
+    });
 };
-app.initialize();
-  function login() {
-    window.plugins.googleplus.login(
-        {
-          'iOSApiKey': '6535513912-uvpf249ak7avodois85tkjmh2lc2j952.apps.googleusercontent.com'
-        },
-        function (obj) {
-          document.querySelector("#image").src = obj.imageUrl;
-          document.querySelector("#image").style.visibility = 'visible';
-          document.querySelector("#feedback").innerHTML = "Hi, " + obj.displayName + ", " + obj.email;
-        },
-        function (msg) {
-          document.querySelector("#feedback").innerHTML = "error: " + msg;
-        }
-    );
-  }
-  function trySilentLogin() {
-    window.plugins.googleplus.trySilentLogin(
-        {
-          'iOSApiKey': '6535513912-uvpf249ak7avodois85tkjmh2lc2j952.apps.googleusercontent.com'
-        },
-        function (obj) {
-          document.querySelector("#image").src = obj.imageUrl;
-          document.querySelector("#image").style.visibility = 'visible';
-          document.querySelector("#feedback").innerHTML = "Silent hi, " + obj.displayName + ", " + obj.email;
-        },
-        function (msg) {
-          document.querySelector("#feedback").innerHTML = "error: " + msg;
-        }
-    );
-  }
-  function logout() {
-    window.plugins.googleplus.logout(
-        function (msg) {
-          document.querySelector("#image").style.visibility = 'hidden';
-          document.querySelector("#feedback").innerHTML = msg;
-        }
-    );
-  }
-  function disconnect() {
-    window.plugins.googleplus.disconnect(
-        function (msg) {
-          document.querySelector("#image").style.visibility = 'hidden';
-          document.querySelector("#feedback").innerHTML = msg;
-        }
-    );
-  }
-  window.onerror = function(what, line, file) {
-    alert(what + '; ' + line + '; ' + file);
-  };
-  function handleOpenURL (url) {
-    document.querySelector("#feedback").innerHTML = "App was opened by URL: " + url;
-  }
+
 </script>
 <style>
 #login {
