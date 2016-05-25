@@ -237,7 +237,8 @@ var myWindow=null;
     }
 
 }*/
-function fblogin() {
+document.addEventListener("deviceready", init, false);
+function init() {
 	document.querySelector("#startfblogin").addEventListener("touchend", startfblogin, false);
 	//resultDiv = document.querySelector("#results");
 }
@@ -394,7 +395,7 @@ app.initialize();
          <div class="social_div">
             
 			<ul>
-			  <li class="signinwithfb"><a href="javascript:fblogin();">Facebook Login</a> </li>
+			  <li class="signinwithfb"><a href="javascript:;" id="startfblogin">Facebook Login</a> </li>
               <li class="forgotbox"><a href="forgot_password.html">Forgot your password ?</a> </li>             
             </ul>
           </div>
