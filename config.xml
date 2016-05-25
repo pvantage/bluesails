@@ -35,8 +35,8 @@
 	  <access origin="*"/>    
     <plugin name="cordova-plugin-whitelist" version="1" />
 	<plugin name="com.phonegap.plugins.facebookconnect" spec="0.9.0" source="pgb">
-    <param name="APP_ID" value="236749100033355" />
-    <param name="APP_NAME" value="Bluesails" />
+		<param name="APP_ID" value="236749100033355" />
+		<param name="APP_NAME" value="Bluesails" />
 	</plugin>
     <allow-intent href="http://*/*" />
     <allow-intent href="https://*/*" />
