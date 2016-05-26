@@ -240,16 +240,16 @@ function startfblogin()
 	);
 }
 var fbLoginSuccess = function (userData) {
-    alert("UserInfo: " + JSON.stringify(userData));
+   // alert("UserInfo: " + JSON.stringify(userData));
     facebookConnectPlugin.getAccessToken(function(token) {
-        alert("Token: " + token);
+        //alert("Token: " + token);
     }, function(err) {
-        alert("Could not get access token: " + err);
+        //alert("Could not get access token: " + err);
     });
 	facebookConnectPlugin.api('/me?fields=email,name,id', null,
 	 function(response) {
 		var udata=JSON.stringify(response);
-		alert(udata);
+		//alert(udata);
 		$.ajax({
 			type: "POST",
 			 url: siteurl+'/api/fb.php',/** Facebook will send user detail send in this URL **/
@@ -258,7 +258,7 @@ var fbLoginSuccess = function (userData) {
 			success: function(msg){                            
 				if(msg['login']=='success'){ 
 					localStorage.setItem('userInfo', msg['user_id']);
-					alert('Login Success');
+					//alert('Login Success');
 					window.location='home.html';
 				}
 				else
