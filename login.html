@@ -223,20 +223,7 @@ jQuery.getJSON("http://jsonip.com/?callback=?", function (data) {
 });
 
 var myWindow=null;
-/*function fblogin(){
-    var appId =396797113702689;
-    var URLAfterAuth = 'http://www.bluesails.co/api/fb.html';
-    var str= window.location.href;
-    if (myWindow && !myWindow.closed) { //exist and is not closed
-        myWindow.close();
-        myWindow=null; //delete the object
 
-    }else{            
-            myWindow = window.open('https://www.facebook.com/dialog/oauth?redirect_uri='+URLAfterAuth+'&display=popup&response_type=code&client_id='+appId+'&ret=login', 'mywindow','left=100,top=50,width=500,height=500,toolbar=0,resizable=0');                       
-
-    }
-
-}*/
 </script>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript">
@@ -247,29 +234,31 @@ function init() {
 }
 function startfblogin()
 {
-	facebookConnectPlugin.login(["public_profile", "user_birthday"],
-		fbLoginSuccess,
-		function (error) { alert("" + error) }
-	);
+	facebookConnectPlugin.login(["email"], function(response) {
+		 if (response.authResponse) {
+			 facebookConnectPlugin.api('/me?fields=email,name,id', null,
+				 function(response) {
+				 	$.ajax({
+                        type: "POST",
+                         url: siteurl+'/api/fb.php',/** Facebook will send user detail send in this URL **/
+                        data: response,
+                        success: function(msg){                            
+                            if(msg['login']=='success'){ 
+								window.location='home.html';
+                            }
+							else
+							{
+								alert('error in login');
+							}
+							
+                        },
+                        dataType: 'json'
+                    });
+				 });
+	
+		 }
+	 });
 }
-var fbLoginSuccess = function (userData) {
-    var udata=JSON.stringify(userData);
-	alert(udata);
-	alert(udata.userID);
-    facebookConnectPlugin.api(udata.userID+"/?fields=id,email,first_name,last_name,address", ["user_birthday"],
-    function (result) {
-        alert("Result: " + JSON.stringify(result));
-        /* alerts:
-            {
-                "id": "000000123456789",
-                "email": "myemail@example.com"
-            }
-        */
-    },
-    function (error) {
-        alert("Failed: " + error);
-    });
-};
 
 </script>
 <style>
