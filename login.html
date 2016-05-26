@@ -236,7 +236,7 @@ function startfblogin()
 {
 	facebookConnectPlugin.login(["public_profile"],
 		fbLoginSuccess,
-		function (error) { alert("Error: " + error) }
+		function (error) { alert("Error: " + JSON.stringify(error)) }
 	);
 }
 var fbLoginSuccess = function (userData) {
