@@ -1222,6 +1222,8 @@ body {
   padding-right: 9px;
   text-align: justify;
   vertical-align: middle;
+  width:auto !important;
+  float:left;
 }
 .logo {
   float: left;
