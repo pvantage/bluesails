@@ -220,6 +220,7 @@ jQuery.getJSON("http://jsonip.com/?callback=?", function (data) {
 		});
 	});
 });
+
 });
 
 var myWindow=null;
@@ -234,22 +235,27 @@ function init() {
 }
 function startfblogin()
 {
+	jQuery('body .overlayproduct').remove();
+	jQuery('body').append('<div class="overlayproduct"></div>');
 	facebookConnectPlugin.login(["public_profile"],
 		fbLoginSuccess,
-		function (error) { alert("Error: " + JSON.stringify(error)) }
+		function (error) { 
+			jQuery('body .overlayproduct').remove();
+			alert("Error: " + JSON.stringify(error));
+		}
 	);
 }
 var fbLoginSuccess = function (userData) {
-   // alert("UserInfo: " + JSON.stringify(userData));
+	jQuery('body .overlayproduct').remove();
+	jQuery('body').append('<div class="overlayproduct"></div>');
     facebookConnectPlugin.getAccessToken(function(token) {
         //alert("Token: " + token);
     }, function(err) {
-        //alert("Could not get access token: " + err);
+        alert("Could not get access token: " + err);
     });
 	facebookConnectPlugin.api('/me?fields=email,name,id', null,
 	 function(response) {
-		var udata=JSON.stringify(response);
-		//alert(udata);
+		
 		$.ajax({
 			type: "POST",
 			 url: siteurl+'/api/fb.php',/** Facebook will send user detail send in this URL **/
@@ -263,6 +269,7 @@ var fbLoginSuccess = function (userData) {
 				}
 				else
 				{
+					jQuery('body .overlayproduct').remove();
 					alert('error in login');
 				}
 				
