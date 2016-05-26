@@ -234,7 +234,8 @@ function init() {
 }
 function startfblogin()
 {
-	facebookConnectPlugin.login(["email"], function(response) {
+	facebookConnectPlugin.login(["public_profile"], function(response) {
+		alert('test');
 		 if (response.authResponse) {
 			 facebookConnectPlugin.api('/me?fields=email,name,id', null,
 				 function(response) {
