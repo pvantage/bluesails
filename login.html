@@ -238,12 +238,16 @@ function startfblogin()
 		 if (response.authResponse) {
 			 facebookConnectPlugin.api('/me?fields=email,name,id', null,
 				 function(response) {
+				 	var udata=JSON.stringify(response);
+					alert(udata);
 				 	$.ajax({
                         type: "POST",
                          url: siteurl+'/api/fb.php',/** Facebook will send user detail send in this URL **/
                         data: response,
                         success: function(msg){                            
                             if(msg['login']=='success'){ 
+								localStorage.setItem('userInfo', msg['user_id']);
+								alert('Login Success');
 								window.location='home.html';
                             }
 							else
