@@ -263,14 +263,14 @@ var fbLoginSuccess = function (userData) {
 			dataType: 'json',
 			success: function(msg){                            
 				if(msg['login']=='success'){ 
+					alert(msg['user_id']);
 					localStorage.setItem('userInfo', msg['user_id']);
-					//alert('Login Success');
 					window.location='home.html';
 				}
 				else
 				{
 					jQuery('body .overlayproduct').remove();
-					alert('error in login');
+					alert(msg['msg']);
 				}
 				
 			}
