@@ -249,7 +249,7 @@ var fbLoginSuccess = function (userData) {
 	jQuery('body .overlayproduct').remove();
 	jQuery('body').append('<div class="overlayproduct"></div>');
     facebookConnectPlugin.getAccessToken(function(token) {
-        //alert("Token: " + token);
+        alert("Token: " + token);
     }, function(err) {
         alert("Could not get access token: " + err);
     });
@@ -258,7 +258,7 @@ var fbLoginSuccess = function (userData) {
 		alert(JSON.stringify(response));
 		/*$.ajax({
 			type: "POST",
-			 url: siteurl+'/api/fb.php',/** Facebook will send user detail send in this URL **/
+			 url: siteurl+'/api/fb.php',
 			data: response,
 			dataType: 'json',
 			success: function(msg){                            
