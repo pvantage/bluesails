@@ -6,11 +6,10 @@
 jQuery(document).ready(function(){    
 	
 	facebookConnectPlugin.logout(
-	function(){
-		alert('success');
-	}
-	, function (){
-		alert('failure');
+	function(success){
+		alert(JSON.stringify(success));
+	},function (failure){
+		alert(JSON.stringify(failure));
 	});
 	window.localStorage.removeItem("userInfo");
 	window.location='home.html';
