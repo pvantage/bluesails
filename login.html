@@ -249,14 +249,14 @@ var fbLoginSuccess = function (userData) {
 	jQuery('body .overlayproduct').remove();
 	jQuery('body').append('<div class="overlayproduct"></div>');
     facebookConnectPlugin.getAccessToken(function(token) {
-        alert("Token: " + token);
+        //alert("Token: " + token);
     }, function(err) {
         alert("Could not get access token: " + err);
     });
 	facebookConnectPlugin.api('/me?fields=email,name,id', null,
 	 function(response) {
 		alert(JSON.stringify(response));
-		/*$.ajax({
+		$.ajax({
 			type: "POST",
 			 url: siteurl+'/api/fb.php',
 			data: response,
@@ -274,7 +274,7 @@ var fbLoginSuccess = function (userData) {
 				}
 				
 			}
-		});*/
+		});
 	 });
 }
 

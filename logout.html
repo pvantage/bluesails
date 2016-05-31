@@ -1,9 +1,17 @@
 <html>
 <head>
 <script type="text/javascript" src="js/jquery.js"></script>
+<script type="text/javascript" src="cordova.js"></script>
 <script>
 jQuery(document).ready(function(){    
 	
+	facebookConnectPlugin.logout(
+	function(){
+		alert('success');
+	}
+	, function (){
+		alert('failure');
+	});
 	window.localStorage.removeItem("userInfo");
 	window.location='home.html';
 		
