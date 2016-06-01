@@ -1,8 +1,11 @@
-<html>
+<!doctype html>
+<html lang="en">
 <head>
+<meta charset="utf-8">
+<title>Bluesails</title>
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="cordova.js"></script>
-<script>
+<script type="text/javascript">
 document.addEventListener("deviceready", fblogout, false);
 function fblogout(){
 	alert('start logout');
@@ -14,7 +17,7 @@ function fblogout(){
 	});
 }
 jQuery(document).ready(function(){    
-	
+	alert('start without logout');
 	/*facebookConnectPlugin.logout(
 	function(success){
 		alert(JSON.stringify(success));
@@ -27,4 +30,5 @@ jQuery(document).ready(function(){
 });
 </script>
 </head>
+<body></body>
 </html>
