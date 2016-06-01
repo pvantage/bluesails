@@ -3,6 +3,16 @@
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="cordova.js"></script>
 <script>
+document.addEventListener("deviceready", fblogout, false);
+function fblogout(){
+	alert('start logout');
+	facebookConnectPlugin.logout(
+	function(success){
+		alert(JSON.stringify(success));
+	},function (failure){
+		alert(JSON.stringify(failure));
+	});
+}
 jQuery(document).ready(function(){    
 	
 	/*facebookConnectPlugin.logout(

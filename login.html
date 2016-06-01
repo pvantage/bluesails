@@ -228,10 +228,10 @@ var myWindow=null;
 </script>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript">
+
 document.addEventListener("deviceready", init, false);
 function init() {
 	document.querySelector("#startfblogin").addEventListener("touchend", startfblogin, false);
-	//resultDiv = document.querySelector("#results");
 }
 function startfblogin()
 {
@@ -249,11 +249,11 @@ var fbLoginSuccess = function (userData) {
 	jQuery('body .overlayproduct').remove();
 	jQuery('body').append('<div class="overlayproduct"></div>');
     facebookConnectPlugin.getAccessToken(function(token) {
-        alert("Token: " + token);
+        //alert("Token: " + token);
     }, function(err) {
         alert("Could not get access token: " + err);
     });
-	facebookConnectPlugin.api('/me?fields=email,name,id, username', null,
+	facebookConnectPlugin.api('/me?fields=email,name,id', null,
 	 function(response) {
 		alert(JSON.stringify(response));
 		$.ajax({
@@ -278,6 +278,56 @@ var fbLoginSuccess = function (userData) {
 	 });
 }
 
+/*document.addEventListener("deviceready", init, false);
+function init() {
+	document.querySelector("#startfblogin").addEventListener("touchend", startfblogin, false);
+	//resultDiv = document.querySelector("#results");
+}
+function startfblogin()
+{
+	jQuery('body .overlayproduct').remove();
+	jQuery('body').append('<div class="overlayproduct"></div>');
+	facebookConnectPlugin.login(["public_profile"],
+		fbLoginSuccess,
+		function (error) { 
+			jQuery('body .overlayproduct').remove();
+			alert("Error: " + JSON.stringify(error));
+		}
+	);
+}
+var fbLoginSuccess = function (userData) {
+	jQuery('body .overlayproduct').remove();
+	jQuery('body').append('<div class="overlayproduct"></div>');
+    facebookConnectPlugin.getAccessToken(function(token) {
+        alert("Token: " + token);
+    }, function(err) {
+        alert("Could not get access token: " + err);
+    });
+	facebookConnectPlugin.api('/me?fields=email,name,id', null,
+	 function(response) {
+		alert(JSON.stringify(response));
+		$.ajax({
+			type: "POST",
+			 url: siteurl+'/api/fb.php',
+			data: response,
+			dataType: 'json',
+			success: function(msg){                            
+				if(msg['login']=='success'){ 
+					//alert(msg['user_id']);
+					localStorage.setItem('userInfo', msg['user_id']);
+					window.location='home.html';
+				}
+				else
+				{
+					jQuery('body .overlayproduct').remove();
+					alert(msg['msg']);
+				}
+				
+			}
+		});
+	 });
+}
+*/
 </script>
 <style>
 #login {
