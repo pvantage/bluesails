@@ -11,9 +11,9 @@ function fblogout(){
 	alert('start logout');
 	facebookConnectPlugin.logout(
 	function(success){
-		alert(JSON.stringify(success));
+		return true;
 	},function (failure){
-		alert(JSON.stringify(failure));
+		return true;
 	});
 }
 jQuery(document).ready(function(){  
