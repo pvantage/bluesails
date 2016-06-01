@@ -6,27 +6,24 @@
 <script type="text/javascript" src="js/jquery.js"></script>
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript">
-document.addEventListener("deviceready", fblogout, false);
+//document.addEventListener("deviceready", fblogout, false);
 function fblogout(){
 	alert('start logout');
 	facebookConnectPlugin.logout(
 	function(success){
-		return true;
+		window.localStorage.removeItem("userInfo");
+		window.location='home.html';
 	},function (failure){
-		return true;
+		window.localStorage.removeItem("userInfo");
+		window.location='home.html';
 	});
 }
 jQuery(document).ready(function(){  
 	fblogout();  
-	alert('start without logout');
-	/*facebookConnectPlugin.logout(
-	function(success){
-		alert(JSON.stringify(success));
-	},function (failure){
-		alert(JSON.stringify(failure));
-	});*/
+	/*alert('start without logout');
+	
 	window.localStorage.removeItem("userInfo");
-	window.location='home.html';
+	window.location='home.html';*/
 		
 });
 </script>
