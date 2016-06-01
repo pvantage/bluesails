@@ -253,7 +253,7 @@ var fbLoginSuccess = function (userData) {
     }, function(err) {
         alert("Could not get access token: " + err);
     });
-	facebookConnectPlugin.api('/me?fields=id,name,username,emails,first_name,last_name', null,
+	facebookConnectPlugin.api('/me?fields==email,name,id,first_name,last_name', null,
 	 function(response) {
 		alert(JSON.stringify(response));
 		$.ajax({
