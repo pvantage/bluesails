@@ -11,14 +11,15 @@ function fblogout(){
 	alert('start logout');
 	facebookConnectPlugin.logout(
 	function(success){
-		window.localStorage.removeItem("userInfo");
+		alert('success');
 		window.location='home.html';
 	},function (failure){
-		window.localStorage.removeItem("userInfo");
+		alert('fail');
 		window.location='home.html';
 	});
 }
-jQuery(document).ready(function(){  
+jQuery(document).ready(function(){ 
+	window.localStorage.removeItem("userInfo"); 
 	fblogout();  
 	/*alert('start without logout');
 	
