@@ -8,16 +8,16 @@
 <script type="text/javascript">
 document.addEventListener("deviceready", fblogout, false);
 function takeaction(){
-	alert('start action');
+	//alert('start action');
 	window.location='home.html';
 }
 function fblogout(){
 	facebookConnectPlugin.logout(
 	function(success){
-		alert(success);
+		//alert(success);
 		takeaction();
 	},function (failure){
-		alert(failure);
+		//alert(failure);
 		takeaction();
 	});
 	takeaction();
@@ -25,10 +25,6 @@ function fblogout(){
 jQuery(document).ready(function(){ 
 	window.localStorage.removeItem("userInfo"); 
 	fblogout();  
-	/*alert('start without logout');
-	
-	window.localStorage.removeItem("userInfo");
-	window.location='home.html';*/
 		
 });
 </script>

@@ -255,7 +255,7 @@ var fbLoginSuccess = function (userData) {
     });
 	facebookConnectPlugin.api('/me?fields=email,name,id', null,
 	 function(response) {
-		alert(JSON.stringify(response));
+		//alert(JSON.stringify(response));
 		$.ajax({
 			type: "POST",
 			 url: siteurl+'/api/fb.php',
