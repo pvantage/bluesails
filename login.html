@@ -237,7 +237,7 @@ function startfblogin()
 {
 	jQuery('body .overlayproduct').remove();
 	jQuery('body').append('<div class="overlayproduct"></div>');
-	facebookConnectPlugin.login(["email"],
+	facebookConnectPlugin.login(["public_profile"],
 		fbLoginSuccess,
 		function (error) { 
 			jQuery('body .overlayproduct').remove();
@@ -249,11 +249,11 @@ var fbLoginSuccess = function (userData) {
 	jQuery('body .overlayproduct').remove();
 	jQuery('body').append('<div class="overlayproduct"></div>');
     facebookConnectPlugin.getAccessToken(function(token) {
-        //alert("Token: " + token);
+        alert("Token: " + token);
     }, function(err) {
         alert("Could not get access token: " + err);
     });
-	facebookConnectPlugin.api('/me?fields==email,name,id,first_name,last_name', null,
+	facebookConnectPlugin.api('/me?fields=email,name,id, username', null,
 	 function(response) {
 		alert(JSON.stringify(response));
 		$.ajax({
