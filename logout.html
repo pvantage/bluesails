@@ -16,7 +16,8 @@ function fblogout(){
 		alert(JSON.stringify(failure));
 	});
 }
-jQuery(document).ready(function(){    
+jQuery(document).ready(function(){  
+	fblogout();  
 	alert('start without logout');
 	/*facebookConnectPlugin.logout(
 	function(success){
