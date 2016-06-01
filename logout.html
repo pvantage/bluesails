@@ -7,16 +7,20 @@
 <script type="text/javascript" src="cordova.js"></script>
 <script type="text/javascript">
 //document.addEventListener("deviceready", fblogout, false);
+function takeaction(){
+	alert('start action');
+	window.location='home.html';
+}
 function fblogout(){
-	alert('start logout');
 	facebookConnectPlugin.logout(
 	function(success){
-		alert('success');
-		window.location='home.html';
+		alert(success);
+		takeaction();
 	},function (failure){
-		alert('fail');
-		window.location='home.html';
+		alert(failure);
+		takeaction();
 	});
+	takeaction();
 }
 jQuery(document).ready(function(){ 
 	window.localStorage.removeItem("userInfo"); 
