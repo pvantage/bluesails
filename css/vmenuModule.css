@@ -100,7 +100,10 @@ height:0;
   padding-left: 71px;
 }
 .u-vmenu > ul > li > ul > li > ul > li > ul > li > a {
-	padding-left: 135px;
+	padding-left: 95px;
+}
+.u-vmenu > ul > li > ul > li > ul > li > ul > li >ul >li > a {
+	padding-left: 105px;
 }
 .u-vmenu ul li a[data-option='on']{
 	background: url(../images/on.png) right center no-repeat !important;
