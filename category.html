@@ -131,6 +131,13 @@ jQuery.getJSON("http://jsonip.com/?callback=?", function (data) {
 	});
 });
 </script>
+<script type="text/javascript" src="cordova.js"></script>
+<script type="text/javascript">
+function onBackKeyDown() {
+    history.go(-1);
+    navigator.app.backHistory();
+}
+</script>
 </head>
 <body>
 <div class="main_page">
