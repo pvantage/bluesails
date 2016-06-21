@@ -3791,4 +3791,6 @@ min-height: 135px;
     position: absolute;
     text-align: center;
 }
-.showprice, .showprice strong{color:#3691ad !important; float:none !important;}
+.showprice, .showprice strong{color:#3691ad !important; float:none !important; font-weight:bold;}
+strong del{font-weight:bold;}
+strong{font-weight:bold !important;}
