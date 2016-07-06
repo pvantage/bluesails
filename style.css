@@ -363,6 +363,7 @@ body.home_bg{background: #2b1e56 none repeat scroll 0 0;}
   float: left;
   padding-right: 0 !important;
   text-align: center;
+  margin-bottom:-13px;
   width: 100%;
 }
 .products_result .top_div > ul {
