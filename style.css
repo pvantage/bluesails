@@ -362,8 +362,7 @@ body.home_bg{background: #2b1e56 none repeat scroll 0 0;}
 .pro_name > strong {
   float: left;
   padding-right: 0 !important;
-  text-align: center;
-  margin-bottom:-13px;
+  text-align: center; 
   width: 100%;
 }
 .products_result .top_div > ul {
