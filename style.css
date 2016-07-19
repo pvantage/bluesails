@@ -371,8 +371,7 @@ body.home_bg{background: #2b1e56 none repeat scroll 0 0;}
 }
 .category_div .pro_name strong {
   font-size: 15px;
-  font-weight: 400;
-  color:#000 !important;
+  font-weight: 400;  
 }
 .product_div .cart_div.add_to_cart.add_cart {
   margin-bottom: 0 !important;
@@ -3794,4 +3793,4 @@ min-height: 135px;
 }
 .showprice, .showprice strong{color:#3691ad !important; float:none !important; font-weight:bold;}
 strong del{font-weight:bold; color:#555;}
-strong{font-weight:bold !important;}
+strong{font-weight:bold !important;}strong.price_style{ color:#3691ad!important}

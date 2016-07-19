@@ -173,11 +173,11 @@ jQuery(document).ready(function(){
 				{
 					if((pro['products'][index]['image'])=='')
 					{
-						jQuery(".products_result").append("<div class='product_main " + div_class +"'><div class='product_inner woo_pro_details' id="+pro['products'][index]['id']+">"+pro['products'][index]['salelogo']+'<img src='+"images/no_product.jpg"+' height='+150+' width='+150+'><p class="pro_name">'+pro['products'][index]['name']+'<br/><strong>'+pro['products'][index]['price']+"</strong></p></div><div class='cart_div add_to_cart add_cart' id="+pro['products'][index]['id']+"><div class='edit_cart edit_cart2'><input type='button' name='add_to_cart' value='add to cart'></div></div></div>");
+						jQuery(".products_result").append("<div class='product_main " + div_class +"'><div class='product_inner woo_pro_details' id="+pro['products'][index]['id']+">"+pro['products'][index]['salelogo']+'<img src='+"images/no_product.jpg"+' height='+150+' width='+150+'><p class="pro_name">'+pro['products'][index]['name']+'<br/><strong class="price_style">'+pro['products'][index]['price']+"</strong></p></div><div class='cart_div add_to_cart add_cart' id="+pro['products'][index]['id']+"><div class='edit_cart edit_cart2'><input type='button' name='add_to_cart' value='add to cart'></div></div></div>");
 					}
 					else
 					{
-						jQuery(".products_result").append("<div class='product_main " + div_class +"'><div class='product_inner woo_pro_details' id="+pro['products'][index]['id']+">"+pro['products'][index]['salelogo']+'<img src='+pro['products'][index]['image']+' height='+150+' width='+150+'><p class="pro_name">'+pro['products'][index]['name']+'<br/><strong>'+pro['products'][index]['price']+"</strong></p></div><div class='cart_div add_to_cart add_cart' id="+pro['products'][index]['id']+"><div class='edit_cart'><input type='button' name='add_to_cart' value='add to cart' class='edit_cart edit_cart2'></div></div></div>");
+						jQuery(".products_result").append("<div class='product_main " + div_class +"'><div class='product_inner woo_pro_details' id="+pro['products'][index]['id']+">"+pro['products'][index]['salelogo']+'<img src='+pro['products'][index]['image']+' height='+150+' width='+150+'><p class="pro_name">'+pro['products'][index]['name']+'<br/><strong class="price_style">'+pro['products'][index]['price']+"</strong></p></div><div class='cart_div add_to_cart add_cart' id="+pro['products'][index]['id']+"><div class='edit_cart'><input type='button' name='add_to_cart' value='add to cart' class='edit_cart edit_cart2'></div></div></div>");
 					}
 				}
 				
@@ -228,11 +228,11 @@ jQuery(document).ready(function(){
 		
 		if((res['products'][index]['image'])=='')
 		{
-			jQuery(".products_result").append("<div class='product_main " + div2_class +"'><div class='product_inner woo_pro_details' id="+res['products'][index]['id']+">"+res['products'][index]['salelogo']+'<img src='+"images/no_product.jpg"+' height='+150+' width='+150+'><p class="pro_name">'+res['products'][index]['name']+'<br/><strong>'+res['products'][index]['price']+"</strong></p></div><div class='cart_div add_to_cart add_cart' id="+res['products'][index]['id']+"><div class='edit_cart edit_cart2'><input type='button' name='add_to_cart' value='add to cart'></div></div></div>");
+			jQuery(".products_result").append("<div class='product_main " + div2_class +"'><div class='product_inner woo_pro_details' id="+res['products'][index]['id']+">"+res['products'][index]['salelogo']+'<img src='+"images/no_product.jpg"+' height='+150+' width='+150+'><p class="pro_name">'+res['products'][index]['name']+'<br/><strong class="price_style">'+res['products'][index]['price']+"</strong></p></div><div class='cart_div add_to_cart add_cart' id="+res['products'][index]['id']+"><div class='edit_cart edit_cart2'><input type='button' name='add_to_cart' value='add to cart'></div></div></div>");
 		}
 		else
 		{
-			jQuery(".products_result").append("<div class='product_main " + div2_class +"'><div class='product_inner woo_pro_details' id="+res['products'][index]['id']+">"+res['products'][index]['salelogo']+'<img src='+res['products'][index]['image']+' height='+150+' width='+150+'><p class="pro_name">'+res['products'][index]['name']+'<br/><strong>'+res['products'][index]['price']+"</strong></p></div><div class='cart_div add_to_cart add_cart' id="+res['products'][index]['id']+"><div class='edit_cart edit_cart2'><input type='button' name='add_to_cart' value='add to cart'></div></div></div>");
+			jQuery(".products_result").append("<div class='product_main " + div2_class +"'><div class='product_inner woo_pro_details' id="+res['products'][index]['id']+">"+res['products'][index]['salelogo']+'<img src='+res['products'][index]['image']+' height='+150+' width='+150+'><p class="pro_name">'+res['products'][index]['name']+'<br/><strong class="price_style">'+res['products'][index]['price']+"</strong></p></div><div class='cart_div add_to_cart add_cart' id="+res['products'][index]['id']+"><div class='edit_cart edit_cart2'><input type='button' name='add_to_cart' value='add to cart'></div></div></div>");
 		}
 		
 		prod_ctr2++;
