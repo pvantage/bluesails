@@ -2054,10 +2054,9 @@ width: 100%;
   margin-right: 0;
 }
 .product_inner {
-
   box-sizing: border-box;
   float: left;
-  padding-top: 10px;
+  padding-top:3px;
   width: 100%;
 }
 .cat_name {
