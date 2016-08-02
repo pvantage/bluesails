@@ -3451,6 +3451,10 @@ width:100%;
 }
 }
 @media(max-width:360px){
+.woo_pro_details img {
+  min-height: 200px;
+  width: 95%;
+}
 	.content.product_div {
   margin-top: 0;
   text-align: center;
