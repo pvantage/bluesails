@@ -10,6 +10,10 @@
 
 
 /**************************************27-2016****************************************************/
+
+.product_main {
+  vertical-align:top !important;
+}
 a:focus {
   outline: none!important;
   outline-offset: -2px;
@@ -843,7 +847,6 @@ right: 0px !important;
 
 
 cursor: pointer;
-
 font-size: 10px !important;
 padding: 4px 2px;
 
@@ -2057,7 +2060,7 @@ width: 100%;
 .product_inner {
   box-sizing: border-box;
   float: left;
-  padding-top:3px;
+  padding-top:2%;
   width: 100%;
 }
 .cat_name {
@@ -2677,6 +2680,7 @@ input[name="quantity"] {
   padding: 10px;
   position: absolute;
   text-align: center;
+
   top: 0;
   width: 100%;
 }
@@ -2704,7 +2708,17 @@ input[name="quantity"] {
   min-height: 200px;
   width: 96%;
 }
-
+.category_main {
+  vertical-align: top !important;
+}
+.product_inner > img {
+  width: 96% !important;
+}
+.product_main {
+ 
+  vertical-align: top !important;
+ 
+}
 
 /****************************************responsive**********************************************/
 @media(max-width:1296px){
@@ -3441,6 +3455,7 @@ width:100%;
   float: none;
   text-align: center;
   width: 40%;
+  vertical-align:top !important;
 }
 
 @media(max-width:390px){
@@ -3665,6 +3680,8 @@ width: 38%;
   padding-top: 0;
 }
 .footer {
+
+
   float: left;
   margin-top: 14px;
   width: 19%;
